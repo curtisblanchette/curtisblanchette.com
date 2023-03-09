@@ -1,0 +1,42 @@
+.experience {
+    border-bottom: 1px solid rgba(0, 0, 0, .25);
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+}
+.experience:first-child {
+    border-top: 1px solid rgba(0, 0, 0, .25);
+}
+.experience img {
+    margin: 28px 1em;
+    width: 20px;
+}
+.experience .timeframe {
+    font-size: 14px;
+    opacity: .6;
+    position:absolute;
+    top:1em;
+    right:1em;
+}
+
+.experience .role {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+.experience .role .website {
+    font-size: .8em;
+    font-weight: 300;
+}
+.experience .company {
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+.experience .location {
+    font-weight: 400;
+}
+.experience .responsibilities li {
+    font-size: 14px;
+}
+.experience .arrow {
+    margin: 28px 1em; width: 20px;
+}
