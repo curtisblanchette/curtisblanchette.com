@@ -30,7 +30,8 @@ jobs:
           git config user.email "<curtis@4iiz.com>"
 
       - name: Build Dist
-        run: npm run build
+        run: npm install | 
+             npm run build
 
       - name: Upload to S3
         env:
