@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const Container = styled.ul`
+const Container = styled.div`
+	flex: 1 1 250px;
+`;
+const Ul = styled.ul`
   display: flex;
   list-style: none;
   margin: 1em 0 0 0;
@@ -21,13 +24,15 @@ const Icon = styled.i`
 const SkillList = () => {
 	return (
 		<Container>
-			<li><Icon className="fa fa-check highlight"/> Business/Test Driven Development</li>
-			<li><Icon className="fa fa-check highlight"/> No SQL/SQL Databases</li>
-			<li><Icon className="fa fa-check highlight"/> Webhooks and WebSockets</li>
-			<li><Icon className="fa fa-check highlight"/> Object Relational Mapping</li>
-			<li><Icon className="fa fa-check highlight"/> Object-Oriented Programming</li>
-			<li><Icon className="fa fa-check highlight"/> Infrastructure as Code</li>
-			<li><Icon className="fa fa-check highlight"/> Microservice Architectures</li>
+			<Ul>
+				<li><Icon className="fa fa-check highlight"/> Business/Test Driven Development</li>
+				<li><Icon className="fa fa-check highlight"/> No SQL/SQL Databases</li>
+				<li><Icon className="fa fa-check highlight"/> Webhooks and WebSockets</li>
+				<li><Icon className="fa fa-check highlight"/> Object Relational Mapping</li>
+				<li><Icon className="fa fa-check highlight"/> Object-Oriented Programming</li>
+				<li><Icon className="fa fa-check highlight"/> Infrastructure as Code</li>
+				<li><Icon className="fa fa-check highlight"/> Microservice Architectures</li>
+			</Ul>
 		</Container>
 	)
 }

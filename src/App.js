@@ -46,6 +46,11 @@ const Container = styled.div`
   }
 `;
 
+const FlexSection = styled.section`
+	display: flex;
+	flex-wrap: wrap;
+`
+
 const BlockQuote = styled.blockquote`
   text-align: right;
   font-style: italic;
@@ -53,7 +58,6 @@ const BlockQuote = styled.blockquote`
   color: ${ props => props.theme.color };
   transition: color .5s ease-in-out;
 `;
-
 
 const App = () => {
 
@@ -102,11 +106,11 @@ const App = () => {
 					<Header/>
 					<Hero/>
 					<ExperienceList/>
-					<section className="competence">
+					<FlexSection>
 						<AccreditationList/>
 						<SkillList/>
-						<ProficiencyList/>
-					</section>
+					</FlexSection>
+					<ProficiencyList/>
 					<section>
 						<BlockQuote cite="Albert Einstein">
 							"Logic will get you from A to Z; Imagination will get you everywhere."<br/>

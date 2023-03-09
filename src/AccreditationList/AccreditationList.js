@@ -21,7 +21,7 @@ const Icon = styled.i`
 `;
 
 const Accreditations = styled.div`
-  flex: 1 50%;
+  flex: 1 1 50%;
 `;
 
 const Accreditation = (props) => {
@@ -38,7 +38,7 @@ const AccreditationList = (props) => {
 			<Accreditation icon="fa-trophy" title="Winners Startup Weekend Okanagan 2014"/>
 			<Accreditation icon="fa-github" title="8,264 Git contributions in the last year"/>
 
-			<ReactSVG src={ graph } style={{ width: 'inherit', height: 'inherit' }} />
+			{/*<ReactSVG src={ graph } style={{ width: 'inherit', height: 'inherit' }} />*/}
 
 
 		</Accreditations>
