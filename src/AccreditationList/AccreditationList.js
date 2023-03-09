@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from "react";
-import graph from './contributions-graph.svg';
-import { ReactSVG } from "react-svg";
+// import graph from './contributions-graph.svg';
+// import { ReactSVG } from "react-svg";
 import './graph-theme.css';
 
 const Title = styled.h3`
