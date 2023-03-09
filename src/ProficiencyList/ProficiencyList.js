@@ -49,11 +49,9 @@ const Image = styled.img`
   display: block;
   flex: 1 1 0;
   width: 6%;
-  height: fit-content;
 `;
 
 const ProficiencyList = () => {
-
 
 	const images = [ node, docker, aws, typescript, angular, react, postgres, mysql, terraform, ubuntu, bash, sass ];
 
