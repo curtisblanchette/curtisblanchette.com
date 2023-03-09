@@ -1,8 +1,10 @@
-import { experienceList } from './data';
+import { data } from './data';
 import arrow from './arrow.svg';
 import { useState } from "react";
 import styled from 'styled-components';
 import styles from './experiences.module.css';
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import './experienceAnimations.css';
 
 const Container = styled.section`
   overflow: hidden;
@@ -10,17 +12,18 @@ const Container = styled.section`
 `;
 
 const Article = styled.article`
-  border-bottom: 1px solid ${props => props.theme.borderColor};
+  border-bottom: 1px solid ${ props => props.theme.borderColor };
   display: flex;
+	overflow: hidden;
   align-items: flex-start;
   position: relative;
   color: ${ props => props.theme.color };
-	transition-property: color, border-color;
-	transition-duration: .5s;
-	transition-timing-function: ease-in-out;
-	
+  transition-property: color, border-color, opacity, transform;
+  transition-duration: .25s;
+  transition-timing-function: ease-in-out;
+
   &:first-child {
-    border-top: 1px solid ${props => props.theme.borderColor};
+    border-top: 1px solid ${ props => props.theme.borderColor };
   }
 
   img {
@@ -45,38 +48,50 @@ export const ExperienceList = (props) => {
 		year: 'numeric',
 		month: 'short',
 	};
-
 	const [ showMore, setShowMore ] = useState(false);
-	const [ experiences, setExperiences ] = useState(experienceList.slice(0, 3))
-
+	const [ experiences, setExperiences ] = useState(data.slice(0, 3))
 
 	const handleClick = (showMore) => {
 		setShowMore(showMore);
-		(showMore ? setExperiences(experienceList) : setExperiences(experienceList.slice(0, 3)));
+		(showMore ? setExperiences(items => [
+			...items,
+			...data.slice(3, 5)
+		]) : setExperiences(items => [
+			...items.slice(0, 3)
+		]))
 	}
 
 	return (
 		<Container>
-			{props.theme}
-			{ experiences && experiences.map((experience, i) => (
-				<Article className={ styles.experience } key={ i }>
-					<img src={ arrow } alt="Bullet" className={ styles.arrow }/>
-					<div>
-						<h3 className={ styles.role }>{ experience.role } </h3>
-						<h4 className={ styles.company }>{ experience.company } | <span
-							className={ styles.location }>{ experience.location }</span>
-						</h4>
-						<span className={ styles.timeframe }>{ experience.startDate.toLocaleDateString('en-us', dateFormat) } - { experience.endDate.toLocaleDateString('en-us', dateFormat) }</span>
+			{ props.theme }
+			<TransitionGroup>
+				{ experiences && experiences.map((item, i) => (
+					<CSSTransition
+						key={ i }
+						nodeRef={ item.nodeRef }
+						timeout={ 250 }
+						classNames="article"
+					>
+						<Article ref={ item.nodeRef }>
+							<img src={ arrow } alt="Bullet" className={ styles.arrow }/>
+							<div>
+								<h3 className={ styles.role }>{ item.role } </h3>
+								<h4 className={ styles.company }>{ item.company } | <span
+									className={ styles.location }>{ item.location }</span>
+								</h4>
+								<span
+									className={ styles.timeframe }>{ item.startDate.toLocaleDateString('en-us', dateFormat) } - { item.endDate.toLocaleDateString('en-us', dateFormat) }</span>
 
-						<ul className={ styles.responsibilities }>
-							{ experience.responsibilities && experience.responsibilities.map((resp, i) => (
-								<li key={ i }>{ resp }</li>
-							)) }
-						</ul>
-					</div>
-
-				</Article>
-			)) }
+								<ul className={ styles.responsibilities }>
+									{ item.responsibilities && item.responsibilities.map((resp, i) => (
+										<li key={ i }>{ resp }</li>
+									)) }
+								</ul>
+							</div>
+						</Article>
+					</CSSTransition>
+				)) }
+			</TransitionGroup>
 
 			<Button onClick={ () => handleClick(!showMore) }>{ !showMore ? 'Show More' : 'Show Less' }</Button>
 

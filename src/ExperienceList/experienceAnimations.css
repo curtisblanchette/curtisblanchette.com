@@ -1,0 +1,20 @@
+.article-enter {
+    opacity: 0;
+    transform: translateY(-10%);
+}
+.article-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: opacity, transform;
+    transition-duration:  250ms;
+}
+.article-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+.article-exit-active {
+    opacity: 0;
+    transform: translateY(-10%);
+    transition-property: opacity, transform;
+    transition-duration:  250ms;
+}

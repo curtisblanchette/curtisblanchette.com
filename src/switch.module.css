@@ -8,10 +8,6 @@
     height: 34px;
 }
 
-.switch.on .slider:before {
-
-}
-
 input {
     opacity: 0;
     width: 0;
@@ -41,7 +37,6 @@ input {
     background-color: white;
     -webkit-transition: transform .4s ease-in-out;
     transition: transform .4s ease-in-out;
-    transition-delay: 1s;
     border-radius: 50%;
 }
 

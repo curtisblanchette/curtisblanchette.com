@@ -6,8 +6,8 @@ import AccreditationList from "./AccreditationList/AccreditationList";
 import SkillList from "./SkillList/SkillList";
 import ProficiencyList from "./ProficiencyList/ProficiencyList";
 import React, { useState } from "react";
-import styles from "./switch.module.css";
 import styled, { ThemeProvider } from 'styled-components';
+import ThemeSwitch from "./ThemeSwitch";
 
 const Container = styled.div`
   border-radius: 4px;
@@ -77,28 +77,10 @@ const App = () => {
 	const [ theme, setTheme ] = useState('dark');
 	const [ lightMode, setLightMode ] = useState(false);
 
-	const ThemeSwitch = (props) => {
-
-		function handleSwitch() {
-			setTheme(theme === 'light' ? 'dark' : 'light');
-			setLightMode(!props.checked);
-		}
-
-		return (
-			// this component gets re-rendered whenever the state changes
-			// the dom is updated and the transition isn't given a chance to live
-			<label className={ styles.switch }>
-				<input type="checkbox" checked={ props.checked } onChange={ handleSwitch }/>
-				<span className={ styles.slider }></span>
-			</label>
-		)
-	}
-
-
 	return (
 		<ThemeProvider theme={ themes[theme] }>
 			<Container>
-				<ThemeSwitch checked={lightMode}/>
+				<ThemeSwitch checked={lightMode} setTheme={setTheme} theme={theme} setLightMode={setLightMode}/>
 				<aside>
 					<ProfilePicture/>
 				</aside>
