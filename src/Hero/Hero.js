@@ -7,8 +7,7 @@ const HeroBlock = styled.p`
   letter-spacing: .02em;
   font-weight: 300;
   line-height: 1.4em;
-  margin-top: 4em;
-  margin-bottom: 3em;
+  margin: 3em 0;
 `;
 
 const Hero = () => {

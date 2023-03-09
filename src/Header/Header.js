@@ -23,11 +23,14 @@ const Heading = styled.h1`
 `;
 
 const Subheading = styled.div`
+	width: fit-content;
   font-weight: 300;
-	display: flex;
+	display: grid;
 	flex-wrap: wrap;
 	flex-direction: column;
-	gap: .5em;
+	grid-gap: .5em;
+  gap: .5em;
+	padding-left: .5em;
 	
 	a {
 		text-decoration: none;

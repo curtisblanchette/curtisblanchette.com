@@ -8,13 +8,10 @@ const ThemeSwitch = (props) => {
 	}
 
 	return (
-		// this component gets re-rendered whenever the state changes
-		// the dom is updated and the transition isn't given a chance to live
 		<label className={ styles.switch }>
 			<input type="checkbox" checked={ props.checked } onChange={ handleSwitch }/>
 			<span className={ styles.slider }></span>
 		</label>
-
 	)
 }
 
