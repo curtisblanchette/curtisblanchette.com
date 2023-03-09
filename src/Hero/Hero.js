@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const HeroBlock = styled.p`
 	color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
   letter-spacing: .02em;
   font-weight: 300;
   line-height: 1.4em;

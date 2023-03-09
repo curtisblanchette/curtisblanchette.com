@@ -1,9 +1,15 @@
 .timeframe {
     font-size: 14px;
     opacity: .6;
-    position:absolute;
-    top:1em;
+
+    top:22px;
     right:1em;
+}
+
+@media all and (min-width: 800px) {
+    .timeframe {
+        position: absolute;
+    }
 }
 
 .role {
@@ -15,7 +21,7 @@
     font-weight: 300;
 }
 .company {
-    margin-top: .5em;
+    margin-top: .2em;
     margin-bottom: .5em;
 }
 .location {
@@ -23,9 +29,11 @@
 }
 .responsibilities {
     padding: 1em;
+
 }
 .responsibilities li {
-    font-size: 14px;
+    font-size: 15px;
+    margin-bottom: 0.5em;
 }
 .arrow {
     margin: 28px 1em; width: 20px;

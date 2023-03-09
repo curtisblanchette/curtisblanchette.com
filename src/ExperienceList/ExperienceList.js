@@ -7,18 +7,20 @@ import styles from './experiences.module.css';
 const Container = styled.section`
   overflow: hidden;
   transition: max-height .25s ease-in-out;
-  //max-height: ${ props => !props.showMore ? '1000px' : '10000px' };
 `;
 
 const Article = styled.article`
-  border-bottom: 1px solid ${props => props.theme === 'light' ?  'rgba(0, 0, 0, .25)' : 'rgba(255, 255, 255, .25)'};
+  border-bottom: 1px solid ${props => props.theme.borderColor};
   display: flex;
   align-items: flex-start;
   position: relative;
   color: ${ props => props.theme.color };
+	transition-property: color, border-color;
+	transition-duration: .5s;
+	transition-timing-function: ease-in-out;
 	
   &:first-child {
-    border-top: 1px solid ${props => props.theme === 'light' ?  'rgba(0, 0, 0, .25)' : 'rgba(255, 255, 255, .25)'};
+    border-top: 1px solid ${props => props.theme.borderColor};
   }
 
   img {
@@ -34,7 +36,8 @@ const Button = styled.button`
   cursor: pointer;
   padding: 1em 0;
   background: none;
-  color: ${ props => props.theme.color }
+  color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
 `;
 
 export const ExperienceList = (props) => {
@@ -54,6 +57,7 @@ export const ExperienceList = (props) => {
 
 	return (
 		<Container>
+			{props.theme}
 			{ experiences && experiences.map((experience, i) => (
 				<Article className={ styles.experience } key={ i }>
 					<img src={ arrow } alt="Bullet" className={ styles.arrow }/>
@@ -62,6 +66,7 @@ export const ExperienceList = (props) => {
 						<h4 className={ styles.company }>{ experience.company } | <span
 							className={ styles.location }>{ experience.location }</span>
 						</h4>
+						<span className={ styles.timeframe }>{ experience.startDate.toLocaleDateString('en-us', dateFormat) } - { experience.endDate.toLocaleDateString('en-us', dateFormat) }</span>
 
 						<ul className={ styles.responsibilities }>
 							{ experience.responsibilities && experience.responsibilities.map((resp, i) => (
@@ -69,8 +74,7 @@ export const ExperienceList = (props) => {
 							)) }
 						</ul>
 					</div>
-					<span
-						className={ styles.timeframe }>{ experience.startDate.toLocaleDateString('en-us', dateFormat) } - { experience.endDate.toLocaleDateString('en-us', dateFormat) }</span>
+
 				</Article>
 			)) }
 

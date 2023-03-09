@@ -11,6 +11,7 @@ const Container = styled.ul`
   flex-direction: column;
   justify-content: space-around;
   color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
 `;
 
 const Icon = styled.i`

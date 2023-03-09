@@ -13,41 +13,44 @@ import sass from './img/Sass.png';
 import React from "react";
 
 import styled from 'styled-components';
+
 const Proficiencies = styled.div`
-    flex: 1 100%;
-	`;
+  flex: 1 100%;
+`;
 
 const BorderContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 1em 0;
-		color: ${ props => props.theme.color }
-	`;
+  display: flex;
+  align-items: center;
+  margin: 1em 0;
+  color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
+`;
 
 const BorderTitle = styled.div`
-    min-width: max-content;
-    font-size: 12px;
-	`;
+  min-width: max-content;
+  font-size: 12px;
+`;
 
 const BorderLine = styled.div`
-    width: 100%;
-    border-bottom: 1px solid ${props => props.theme.color}
-	`;
+  width: 100%;
+  border-bottom: 1px solid ${ props => props.theme.borderColor };
+	transition: border-color .5s ease-in-out;
+`;
 
 const Logos = styled.div`
-    display: flex;
-		align-items: center;
-    width: 100%;
-    gap: 1em;
-    justify-content: space-between;
-	`;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1em;
+  justify-content: space-between;
+`;
 const Image = styled.img`
-    margin: 0px;
-    display: block;
-    flex: 1 1 0%;
-    width: 6%;
-    height: fit-content;
-	`;
+  margin: 0;
+  display: block;
+  flex: 1 1 0;
+  width: 6%;
+  height: fit-content;
+`;
 
 const ProficiencyList = () => {
 

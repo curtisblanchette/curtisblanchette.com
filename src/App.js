@@ -6,7 +6,7 @@ import AccreditationList from "./AccreditationList/AccreditationList";
 import SkillList from "./SkillList/SkillList";
 import ProficiencyList from "./ProficiencyList/ProficiencyList";
 import React, { useState } from "react";
-import "./ThemeSwitch.css";
+import styles from "./switch.module.css";
 import styled, { ThemeProvider } from 'styled-components';
 
 const Container = styled.div`
@@ -22,19 +22,22 @@ const Container = styled.div`
   gap: 0;
   padding: 0 2em 4em 2em;
   background: ${ props => props.theme.background };
+	transition: background .5s ease-in-out;
 
   a {
     color: ${ props => props.theme.color };
+    transition: color .5s ease-in-out;
   }
 
   .content {
-    flex: 4 60%;
+    flex: 1 1 60%;
     min-width: 0;
   }
 
   .aside {
     justify-content: space-around;
-    flex: 1 200px;
+    widtH: auto;
+    flex: 1 1 200px;
     flex-grow: 0;
   }
 
@@ -47,37 +50,42 @@ const BlockQuote = styled.blockquote`
   text-align: right;
   font-style: italic;
   margin: 0 0 0 auto;
-	color: ${props => props.theme.color };
+  color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
 `;
 
 
 const App = () => {
 
 	const themes = {
-		light: {
-			color: '#f3f3f3',
-			background: '#252525'
-		},
 		dark: {
+			color: '#f3f3f3',
+			background: '#252525',
+			borderColor: 'rgba(255, 255, 255, .25)'
+		},
+		light: {
 			color: '#252525',
-			background: '#f3f3f3'
+			background: '#f3f3f3',
+			borderColor: 'rgba(0, 0, 0, .25)'
 		}
 	}
 
-	const [ theme, setTheme ] = useState('light');
-	const [ checked, setChecked ] = useState(false);
+	const [ theme, setTheme ] = useState('dark');
+	const [ lightMode, setLightMode ] = useState(false);
 
-	const ThemeSwitch = () => {
+	const ThemeSwitch = (props) => {
 
 		function handleSwitch() {
 			setTheme(theme === 'light' ? 'dark' : 'light');
-			setChecked(!checked);
+			setLightMode(!props.checked);
 		}
 
 		return (
-			<label className="switch">
-				<input type="checkbox" checked={ checked } onChange={ handleSwitch }/>
-				<span className="slider"></span>
+			// this component gets re-rendered whenever the state changes
+			// the dom is updated and the transition isn't given a chance to live
+			<label className={ styles.switch }>
+				<input type="checkbox" checked={ props.checked } onChange={ handleSwitch }/>
+				<span className={ styles.slider }></span>
 			</label>
 		)
 	}
@@ -86,7 +94,7 @@ const App = () => {
 	return (
 		<ThemeProvider theme={ themes[theme] }>
 			<Container>
-				<ThemeSwitch/>
+				<ThemeSwitch checked={lightMode}/>
 				<aside>
 					<ProfilePicture/>
 				</aside>

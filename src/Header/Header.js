@@ -6,6 +6,7 @@ const Heading = styled.h1`
   font-weight: 900;
   margin-bottom: 10px;
 	color: ${ props => props.theme.color };
+  transition: color .5s ease-in-out;
   line-height: .9em;
   margin-top: 1.5em;
 

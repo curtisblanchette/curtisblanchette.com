@@ -11,6 +11,7 @@ const Title = styled.h3`
   align-items: center;
   gap: 1em;
 	color: ${ props => props.theme.color };
+	transition: color .5s ease-in-out;
 `;
 
 const Icon = styled.i`

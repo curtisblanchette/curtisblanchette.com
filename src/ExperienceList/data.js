@@ -7,10 +7,10 @@ export const experienceList = [
 		startDate: new Date('January 2021'),
 		endDate: new Date(),
 		responsibilities: [
-			'Consulted with business and leadership to distill initiatives from business requirements to fully scoped and estimated projects.',
-			'Designed and documented architecture clearly describing the interoperability of system modules and components for communicating to technical and non-technical stakeholders.',
-			'Forefronted the full stack engineering of a flagship Legal Software built on Angular, Node, Express, PostgreSQL and AWS.',
-			'Led teams of engineers, QA’s and support staff toward success in a fast-paced remote work environment.'
+			'Consulting business and leadership to distill initiatives from requirements to fully scoped, estimated projects.',
+			'Designing and documenting architecture clearly describing the interoperability of system modules and components for communication to technical and non-technical stakeholders.',
+			'Engineering full stack flagship Legal Software built upon Angular, Node, Express, PostgreSQL and AWS.',
+			'Leading teams of engineers, QA’s and support staff toward success in a fast-paced remote work environment.'
 		]
 	}, {
 		company: '4iiz Software',
@@ -20,10 +20,10 @@ export const experienceList = [
 		startDate: new Date('March 2019'),
 		endDate: new Date('December 2021'),
 		responsibilities: [
-			'Produced complex SQL Queries to surface specific reports providing invaluable insights into marketing, client lifecycle, budgets and staff compliance.',
-			'Fostered lasting improvements to design, engineering and quality-assurance iterative cycles to streamline the continuous delivery of progress.',
-			'Designed and Engineered engaging user interfaces with a holistic approach to user experience strategy and best practices.',
-			'Integrated VoIP solutions to customer-facing web applications supporting large-scale call centres in North America.'
+			'Producing complex SQL Queries surfacing reports to provide invaluable marketing, client-lifecycle, budget and staff compliance insights.',
+			'Fostering lasting improvements to design, engineering and quality-assurance iterative cycles, streamlining the continuous delivery of progress.',
+			'Designing and Engineering engaging user interfaces with a holistic approach to UX strategy and best practices.',
+			'Integrating VoIP solutions in customer-facing web applications that support large-scale call centres in North America.'
 		]
 	}, {
 		company: 'QHR Technologies',
@@ -33,9 +33,9 @@ export const experienceList = [
 		startDate: new Date('August 2017'),
 		endDate: new Date('March 2019'),
 		responsibilities: [
-			'Bridged healthcare services under the Shoppers Drug Mart and QHR Platforms in an Agile environment with Angular, Java SpringBoot and MS SQL Server.',
-			'Owned the hiring process, building up and scaling out cross-functional remote teams across Canada.',
-			'Leadership, guidance and coaching for individual contributors\' personal and professional growth.'
+			'Bridging healthcare services under the Shoppers Drug Mart and QHR Platforms in an Agile environment with Angular, Java SpringBoot and MSSQL Server.',
+			'Owning the hiring process, building up and scaling out cross-functional remote teams across Canada.',
+			'Leadership, guidance and coaching of individual contributors\' for personal and professional growth.'
 		]
 	}, {
 		company: 'JBF Sports',
