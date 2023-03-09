@@ -11,7 +11,20 @@ const Container = styled.section`
 `;
 
 const Article = styled.article`
-  color: ${ props => props.theme.color }
+  border-bottom: 1px solid ${props => props.theme === 'light' ?  'rgba(0, 0, 0, .25)' : 'rgba(255, 255, 255, .25)'};
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  color: ${ props => props.theme.color };
+	
+  &:first-child {
+    border-top: 1px solid ${props => props.theme === 'light' ?  'rgba(0, 0, 0, .25)' : 'rgba(255, 255, 255, .25)'};
+  }
+
+  img {
+    margin: 28px 1em;
+    width: 20px;
+  }
 `;
 
 const Button = styled.button`
