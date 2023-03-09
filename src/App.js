@@ -49,6 +49,7 @@ const Container = styled.div`
 const FlexSection = styled.section`
 	display: flex;
 	flex-wrap: wrap;
+	gap: 1em;
 `
 
 const BlockQuote = styled.blockquote`
