@@ -42,10 +42,7 @@ const AccreditationList = (props) => {
 			<Accreditation icon="fa-user-graduate" title="Diploma Graphic Design / Web Development 2014"/>
 			<Accreditation icon="fa-trophy" title="Winner of Startup Weekend Okanagan 2014"/>
 			<Accreditation icon="fa-github" title="8,264 Git contributions in the last year"/>
-
 			{/*<ReactSVG src={ graph } style={{ width: 'inherit', height: 'inherit' }} />*/}
-
-
 		</Accreditations>
 	)
 };

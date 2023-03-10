@@ -39,6 +39,7 @@ const BorderLine = styled.div`
 
 const Logos = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   width: 100%;
   gap: 1em;
@@ -47,7 +48,9 @@ const Logos = styled.div`
 const Image = styled.img`
   margin: 0;
   display: block;
-  flex: 1 1 0;
+  flex: 1 1 70px;
+  min-width: 40px;
+	max-width: 40px;
   width: 6%;
 `;
 
