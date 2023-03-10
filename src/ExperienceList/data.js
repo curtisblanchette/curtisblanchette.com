@@ -17,7 +17,7 @@ export const data = [
 		nodeRef: createRef(),
 	}, {
 		company: '4iiz Software',
-		role: 'Principal Software Engineer',
+		role: 'Senior Software Engineer',
 		website: 'https://www.4iiz.com',
 		location: 'Wilmington, North Carolina',
 		startDate: new Date('2019-03-01'),
