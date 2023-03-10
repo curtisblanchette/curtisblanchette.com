@@ -43,15 +43,13 @@ const Logos = styled.div`
   align-items: center;
   width: 100%;
   gap: 1em;
-  justify-content: space-between;
+  justify-content: center;
 `;
 const Image = styled.img`
   margin: 0;
   display: block;
-  flex: 1 1 70px;
-  min-width: 40px;
-	max-width: 40px;
-  width: 6%;
+  flex: 1 1 auto;
+	max-width: 60px;
 `;
 
 const ProficiencyList = () => {
