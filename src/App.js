@@ -7,7 +7,7 @@ import SkillList from "./SkillList/SkillList";
 import ProficiencyList from "./ProficiencyList/ProficiencyList";
 import React, { useState } from "react";
 import styled, { ThemeProvider } from 'styled-components';
-import ThemeSwitch from "./ThemeSwitch";
+import ToggleSwitch from "./ToggleSwitch/ToggleSwitch";
 
 const Container = styled.div`
   border-radius: 4px;
@@ -61,16 +61,19 @@ const BlockQuote = styled.blockquote`
 `;
 
 const App = () => {
+	// pull variables from root
+	const light = getComputedStyle(document.documentElement).getPropertyValue('--light');
+	const dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
 
 	const themes = {
 		dark: {
-			color: '#f3f3f3',
-			background: '#252525',
+			color: light,
+			background: dark,
 			borderColor: 'rgba(255, 255, 255, .25)'
 		},
 		light: {
-			color: '#252525',
-			background: '#f3f3f3',
+			color: dark,
+			background: light,
 			borderColor: 'rgba(0, 0, 0, .25)'
 		}
 	}
@@ -80,8 +83,10 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={ themes[theme] }>
+			{/*<ScrollProgress></ScrollProgress>*/}
 			<Container>
-				<ThemeSwitch checked={lightMode} setTheme={setTheme} theme={theme} setLightMode={setLightMode}/>
+				{/*<ThemeSwitch checked={lightMode} setTheme={setTheme} theme={theme} setLightMode={setLightMode}/>*/}
+				<ToggleSwitch isOn={lightMode} setTheme={setTheme} theme={theme} setLightMode={setLightMode}></ToggleSwitch>
 				<aside>
 					<ProfilePicture/>
 				</aside>

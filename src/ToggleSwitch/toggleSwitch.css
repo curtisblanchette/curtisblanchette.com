@@ -1,0 +1,32 @@
+.switch {
+    position: absolute;
+    z-index:1;
+    top: 2em;
+    right: 2em;
+    width: 60px;
+    height: 34px;
+    background-color: white;
+    display: flex;
+    padding: 4px;
+    border-radius: 34px;
+    -webkit-transition: background-color .4s;
+    transition: background-color .4s;
+    cursor: pointer;
+}
+
+.handle {
+    justify-content: flex-end;
+    height: 26px;
+    width: 26px;
+    background-color: #222;
+    border-radius: 40px;
+}
+
+.switch[data-is-on="true"] {
+    justify-content: flex-end;
+    background-color: #222;
+}
+
+.switch[data-is-on="true"] .handle {
+    background-color: white;
+}

@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import profile from './github-profile.png';
+
 const ProfileImage = styled.img`
   display: block;
   width: 100%;
-  border-bottom: 10px solid #27AD30;
+  border: 6px solid rgb(39, 173, 48);
   max-width: 200px;
+  border-radius: 100%;
+  margin-top: 4em;
 `;
 
 const ProfilePicture = (props) => {
