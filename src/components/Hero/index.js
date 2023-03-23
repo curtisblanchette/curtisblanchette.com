@@ -10,7 +10,7 @@ const HeroBlock = styled.p`
   margin: 3em 0;
 `;
 
-const Hero = () => {
+const Index = () => {
 	return (
 		<HeroBlock>
 			I am Curtis Blanchette, a professional <span className="highlight">Full-Stack Software Engineer</span> with an
@@ -24,4 +24,4 @@ const Hero = () => {
 	);
 }
 
-export default Hero;
+export default Index;

@@ -37,7 +37,7 @@ const Subheading = styled.div`
 	}
 `;
 
-const Header = () => {
+const Index = () => {
 	return (
 		<>
 			<Heading>Curtis Blanchette</Heading>
@@ -50,4 +50,4 @@ const Header = () => {
 	)
 }
 
-export default Header;
+export default Index;

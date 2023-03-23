@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Feed from "./containers/Feed";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import App from './App';
+import Resume from "./containers/Resume";
+import ErrorPage from "./error-page";
+import Navbar from "./components/Navbar";
+import Root from "./containers/Root";
+import { ThemeProvider } from "styled-components";
+import store from './store';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
+const routes = createBrowserRouter([
+	{
+		path: '/',
+		element: <Root />
+	},
+	{
+		path: '/feed',
+		element: <Feed />,
+		errorElement: <ErrorPage />
+	},
+	{
+		path: '/resume',
+		element: <Resume />,
+		errorElement: <ErrorPage />
+	}
+]);
+
+
 root.render(
 	<React.StrictMode>
-		<App/>
+		<Provider store={store}>
+			<Navbar />
+			<RouterProvider router={routes} />
+		</Provider>
 	</React.StrictMode>
 );
 

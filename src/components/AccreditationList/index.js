@@ -33,7 +33,7 @@ const Accreditation = (props) => {
 	)
 };
 
-const AccreditationList = (props) => {
+const Index = (props) => {
 	return (
 		<Accreditations>
 			<Accreditation icon="fa-person-chalkboard" title="Tony Robbins Unleash the Power Within 2020"/>
@@ -47,4 +47,4 @@ const AccreditationList = (props) => {
 	)
 };
 
-export default AccreditationList;
+export default Index;

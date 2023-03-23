@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import profile from './github-profile.png';
+import profile from '../../assets/github-profile.png';
 
 const ProfileImage = styled.img`
   display: block;
@@ -10,7 +10,7 @@ const ProfileImage = styled.img`
   margin-top: 4em;
 `;
 
-const ProfilePicture = (props) => {
+const Index = (props) => {
 	const className = 'profile';
 
 	return (
@@ -18,4 +18,4 @@ const ProfilePicture = (props) => {
 	)
 }
 
-export default ProfilePicture
+export default Index

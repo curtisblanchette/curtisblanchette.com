@@ -1,15 +1,15 @@
-import node from './img/NodeJS.png'
-import docker from './img/Docker.png';
-import aws from './img/AWS.png';
-import typescript from './img/Typescript.png';
-import angular from './img/Angular.png';
-import react from './img/React.png';
-import postgres from './img/Postgres.png';
-import mysql from './img/MySQL.png';
-import terraform from './img/Terraform.png';
-import ubuntu from './img/Ubuntu.png';
-import bash from './img/Bash.png';
-import sass from './img/Sass.png';
+import node from '../../assets/NodeJS.png'
+import docker from '../../assets/Docker.png';
+import aws from '../../assets/AWS.png';
+import typescript from '../../assets/Typescript.png';
+import angular from '../../assets/Angular.png';
+import react from '../../assets/React.png';
+import postgres from '../../assets/Postgres.png';
+import mysql from '../../assets/MySQL.png';
+import terraform from '../../assets/Terraform.png';
+import ubuntu from '../../assets/Ubuntu.png';
+import bash from '../../assets/Bash.png';
+import sass from '../../assets/Sass.png';
 import React from "react";
 
 import styled from 'styled-components';
@@ -52,7 +52,7 @@ const Image = styled.img`
 	max-width: 60px;
 `;
 
-const ProficiencyList = () => {
+const Index = () => {
 
 	const images = [ node, docker, aws, typescript, angular, react, postgres, mysql, terraform, ubuntu, bash, sass ];
 
@@ -77,4 +77,4 @@ const ProficiencyList = () => {
 	)
 }
 
-export default ProficiencyList;
+export default Index;

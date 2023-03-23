@@ -43,7 +43,7 @@ const Button = styled.button`
   transition: color .5s ease-in-out;
 `;
 
-export const ExperienceList = (props) => {
+export const Index = (props) => {
 	const dateFormat = {
 		year: 'numeric',
 		month: 'short',
@@ -99,4 +99,4 @@ export const ExperienceList = (props) => {
 	);
 }
 
-export default ExperienceList;
+export default Index;

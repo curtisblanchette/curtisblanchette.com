@@ -30,7 +30,7 @@ const Icon = styled.i`
   font-family: 'FontAwesome', sans-serif;
 `;
 
-const SkillList = () => {
+const Index = () => {
 	return (
 		<Container>
 			<Ul>
@@ -48,4 +48,4 @@ const SkillList = () => {
 	)
 }
 
-export default SkillList;
+export default Index;
