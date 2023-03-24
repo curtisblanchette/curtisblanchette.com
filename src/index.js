@@ -16,7 +16,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const routes = createBrowserRouter([
 	{
 		path: '/',
-		element: <Root />
+		element: <Resume />
 	},
 	{
 		path: '/feed',
