@@ -1,3 +1,4 @@
+import React from "react";
 import ProfilePicture from "../../components/ProfilePicture";
 import Header from "../../components/Header";
 import Hero from "../../components/Hero";
@@ -5,10 +6,11 @@ import ExperienceList from "../../components/ExperienceList";
 import Index from "../../components/AccreditationList";
 import SkillList from "../../components/SkillList";
 import ProficiencyList from "../../components/ProficiencyList";
-import React, { useState } from "react";
-import styled, { ThemeProvider } from 'styled-components';
 import ToggleSwitch from "../../components/ToggleSwitch";
-import { selectTheme } from "../../components/ToggleSwitch/themeSlice";
+
+import styled, { ThemeProvider } from 'styled-components';
+
+import { selectTheme } from "../../store/reducers/themeSlice";
 import { useSelector } from "react-redux";
 
 const Main = styled.main`

@@ -6,9 +6,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Resume from "./containers/Resume";
 import ErrorPage from "./error-page";
-import Navbar from "./components/Navbar";
+import { Menu } from "./components/Menu";
 import Root from "./containers/Root";
-import { ThemeProvider } from "styled-components";
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -36,8 +35,12 @@ const routes = createBrowserRouter([
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<Navbar />
-			<RouterProvider router={routes} />
+
+			<div style={{ display: "flex" }}>
+				{/*<Menu />*/}
+				<RouterProvider router={routes} />
+			</div>
+
 		</Provider>
 	</React.StrictMode>
 );

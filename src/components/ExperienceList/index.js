@@ -2,8 +2,8 @@ import { data } from './data';
 import arrow from './arrow.svg';
 import { useState } from "react";
 import styled from 'styled-components';
-import styles from './experiences.module.css';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import styles from './experiences.module.css';
 import './experienceAnimations.css';
 
 const Container = styled.section`

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeReducer from './components/ToggleSwitch/themeSlice'
+import themeReducer from './store/reducers/themeSlice'
 
 const store = configureStore({
 	// Automatically calls `combineReducers`

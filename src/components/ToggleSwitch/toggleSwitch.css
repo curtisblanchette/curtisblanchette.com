@@ -5,7 +5,7 @@
     right: 2em;
     width: 60px;
     height: 34px;
-    background-color: white;
+    background-color: var(--light);
     display: flex;
     padding: 4px;
     border-radius: 34px;
@@ -15,7 +15,10 @@
 }
 
 .handle {
-    justify-content: flex-end;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
     height: 26px;
     width: 26px;
     background-color: #222;
@@ -28,5 +31,16 @@
 }
 
 .switch[data-is-on="true"] .handle {
-    background-color: white;
+    background-color: var(--light);
+}
+
+i {
+    transform: none;
+    color: var(--light);
+}
+
+.switch[data-is-on="true"] i {
+
+    color: var(--dark);
+
 }
