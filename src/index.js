@@ -6,7 +6,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Resume from "./containers/Resume";
 import ErrorPage from "./error-page";
-import { Menu } from "./components/Menu";
 import Root from "./containers/Root";
 import store from './store';
 import { Provider } from 'react-redux';
