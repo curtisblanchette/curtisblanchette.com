@@ -9,9 +9,10 @@ import ProficiencyList from "../../components/ProficiencyList";
 import ToggleSwitch from "../../components/ToggleSwitch";
 
 import styled, { ThemeProvider } from 'styled-components';
-
-import { selectTheme } from "../../store/reducers/themeSlice";
 import { useSelector } from "react-redux";
+import { selectTheme } from "../../store/reducers/themeSlice";
+import { themes } from "../../themes";
+
 
 const Main = styled.main`
   border-radius: 4px;
@@ -63,54 +64,38 @@ const BlockQuote = styled.blockquote`
   color: ${ props => props.theme.color };
   transition: color .5s ease-in-out;
 `;
-// pull variables from root
-const light = getComputedStyle(document.documentElement).getPropertyValue('--light');
-const dark = getComputedStyle(document.documentElement).getPropertyValue('--dark');
 
-const themes = {
-	dark: {
-		color: light,
-		background: dark,
-		borderColor: 'rgba(255, 255, 255, .25)'
-	},
-	light: {
-		color: dark,
-		background: light,
-		borderColor: 'rgba(0, 0, 0, .25)'
-	}
-}
 
 const Resume = () => {
 
-	const theme = useSelector(selectTheme);
+  const theme = useSelector(selectTheme);
 
-	return (
-		<ThemeProvider theme={ themes[theme] }>
-			<Main>
-				{/*<ThemeSwitch checked={lightMode} setTheme={setTheme} theme={theme} setLightMode={setLightMode}/>*/ }
-				<ToggleSwitch></ToggleSwitch>
-				<aside>
-					<ProfilePicture />
-				</aside>
-				<div className="content">
-					<Header />
-					<Hero />
-					<ExperienceList />
-					<FlexSection>
-						<Index />
-						<SkillList />
-					</FlexSection>
-					<ProficiencyList />
-					<section>
-						<BlockQuote cite="Albert Einstein">
-							"Logic will get you from A to Z; Imagination will get you everywhere."<br />
-							- Albert Einstein
-						</BlockQuote>
-					</section>
-				</div>
-			</Main>
-		</ThemeProvider>
-	)
+  return (
+    <ThemeProvider theme={themes[theme]} >
+      <Main>
+        <ToggleSwitch></ToggleSwitch>
+        <aside>
+          <ProfilePicture />
+        </aside>
+        <div className="content">
+          <Header />
+          <Hero />
+          <ExperienceList />
+          <FlexSection>
+            <Index />
+            <SkillList />
+          </FlexSection>
+          <ProficiencyList />
+          <section>
+            <BlockQuote cite="Albert Einstein">
+              "Logic will get you from A to Z; Imagination will get you everywhere."<br />
+              - Albert Einstein
+            </BlockQuote>
+          </section>
+        </div>
+      </Main>
+    </ThemeProvider>
+  )
 }
 
 export default Resume;

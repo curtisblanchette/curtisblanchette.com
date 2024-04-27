@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './toggleSwitch.css'
+import styles from './ToggleSwitch.module.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTheme, setLight, setDark } from "../../store/reducers/themeSlice";
 
@@ -15,12 +15,12 @@ export default function ToggleSwitch() {
 		dispatch(action())
 	}
 	return (
-		<div className="switch"
+		<div className={styles.switch}
 		     data-is-on={ theme === 'light' }
 		     onClick={ toggleSwitch }
 		     style={{ justifyContent: isOn ? "flex-end" : "flex-start"}}
 		>
-			<motion.div className="handle" layout transition={ spring }>
+			<motion.div className={styles.handle} layout transition={ spring }>
 				<motion.i
 					className={ `icon far fa-${ isOn ? 'sun' : 'moon' }` }
 					key={ isOn ? 'sun' : 'moon' }

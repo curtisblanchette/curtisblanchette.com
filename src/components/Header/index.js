@@ -28,10 +28,15 @@ const Subheading = styled.div`
 	display: grid;
 	flex-wrap: wrap;
 	flex-direction: column;
+	
 	grid-gap: .5em;
   gap: .5em;
 	padding-left: .5em;
 	
+	i {
+		color: ${props => props.theme.color};
+		transition: color .5s ease-in-out;
+	}
 	a {
 		text-decoration: none;
 	}

@@ -1,9 +1,5 @@
 nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
+    width: 0;
 }
 
 .background {
@@ -12,5 +8,6 @@ nav {
     left: 0;
     bottom: 0;
     width: 300px;
-    background: rgb(243, 243, 243);
+    background: rgb(42,193,52);
+    background: linear-gradient(131deg, rgba(42,193,52,1) 0%, rgba(19,111,25,1) 100%);
 }

@@ -20,6 +20,8 @@ const Icon = styled.i`
   font-size: 1.5em;
   min-width: 1.5em;
   text-align: center;
+	color: ${ props => props.theme.color };
+	transition: color .5s ease-in-out;
 `;
 
 const Accreditations = styled.div`
