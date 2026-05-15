@@ -1,0 +1,65 @@
+---
+title: The Atlantic Labs
+client: The Atlantic × Metalab
+role: Engineering Lead
+year: "2024–2025"
+summary: A multi-year AI sandbox engagement running a portfolio of editorial-AI experiments under one umbrella.
+tags: ["AI Sandbox", "Turborepo", "AWS", "RAG", "Editorial AI", "CI/CD"]
+cover: /images/atlantic/home.png
+visibility: public
+---
+
+## The engagement
+
+The Atlantic Labs is not a single product. It's an ongoing AI sandbox: an editorial-AI innovation engagement between The Atlantic and Metalab where multiple experiments run in parallel, share infrastructure, and ship to readers only when they earn it.
+
+The brief is bigger than any individual deliverable. **Can a 168-year-old publisher use AI-native surfaces to make its archive more useful — without compromising voice, editorial standards, or reader trust?** That question is the engagement. Specific experiments are the way we answer it in public.
+
+## The pattern
+
+What makes the Labs engagement work — and what I owned as engineering lead — is the operating pattern underneath every experiment:
+
+- **Experiment-as-package.** A Turborepo monorepo, with each experiment scoped as its own app inside `experiments/`. New experiments inherit the toolchain (TypeScript, build, test, deploy) without setup tax. Spinning up the next hypothesis costs hours, not weeks.
+- **One CI/CD pipeline, many surfaces.** A single deployment harness handles browser extensions, marketing microsites, internal admin tools, and backend services. The same pipeline that ships a wrapper experiment ships an editorial dashboard.
+- **Shared retrieval, swappable ranking.** Every experiment talks to the same recommendation backend. Ranking models are swapped behind a `model` parameter, so editorial can A/B which lens works best for a given experience — *Balanced*, *Timely*, *Long-form*, or anything we add next — without redeploying the experiment.
+- **Editorial as a first-class user.** Editorial controls are not a backend tuning knob. They're a product surface, named in plain English, used by The Atlantic's own team to steer what gets surfaced.
+- **Privacy by default.** No background page classification. No silent profile-building. The system only acts on context a reader has explicitly given it.
+
+## Experiments shipped under the umbrella
+
+- **The Atlantic Take** — a browser extension that surfaces archival Atlantic stories matched to whatever you're reading on the open web. Three retrieval models, an editorial control surface, a swipeable card UI, and a marketing microsite.
+- **Wrapper experiments** — a family of reader-facing surfaces (codenamed *Abby*, *Home*, *Odyssey*) that explored different placements and form factors for AI-driven discovery against the same retrieval backend.
+
+Each experiment was scoped to validate a specific hypothesis, ship in weeks, and either graduate, iterate, or sunset on the evidence.
+
+## Architecture sketch
+
+```
+   ┌───────────────────── EDITORIAL ──────────────────────┐
+   │  ranking-model selector · curation surface · audit   │
+   └────────────────────────┬─────────────────────────────┘
+                            │
+   ┌────────────────────────▼─────────────────────────────┐
+   │  Shared retrieval / ranking service                  │
+   │  Atlantic archive index · Balanced / Timely / Long…  │
+   └─────┬──────────────┬──────────────┬──────────────────┘
+         │              │              │
+    ┌────▼───┐     ┌────▼────┐    ┌────▼────────────┐
+    │ TAKE   │     │ WRAPPER │    │ WRAPPER         │
+    │ (ext.) │     │ (Abby)  │    │ (Home/Odyssey)  │
+    └────────┘     └─────────┘    └─────────────────┘
+```
+
+A Terraform-managed AWS footprint underneath. A Turborepo monorepo on top. Everything in between is the experiment harness.
+
+## What I owned
+
+- Technical lead across the engagement — not any single experiment.
+- The experiment harness: monorepo layout, shared infrastructure, the CI/CD pipeline that lets a new experiment go from `git init` to deployed in days.
+- The contract between editorial, the retrieval/ranking service, and every reader-facing surface.
+- AWS infrastructure via Terraform; the deployment story The Atlantic could operate without us.
+- The editorial-surface design — translating "what makes a good match for *this* audience" between domain experts and the ranking team into a named, controllable product surface.
+
+## What carried forward
+
+The most useful pattern from Labs — the one that will outlive any specific experiment — is **treating the editorial control surface as a first-class product**, not a tuning knob. The moment the model choice (Balanced / Timely / Long-form) was named, surfaced, and controllable, the conversation about quality moved from *"is the AI right?"* to *"which lens do we want for this reader?"*. A much better conversation to have. A version of this thinking shows up in [The Quiet Trade](/writing/the-quiet-trade): judgment is the priced layer; the deliverable should make that judgment visible, not hide it.

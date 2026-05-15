@@ -1,0 +1,49 @@
+---
+title: Cortex MPC
+client: Personal R&D
+role: Architect & Engineer
+year: "2025"
+summary: A grow-room Model Predictive Controller with a 7-state ODE physics model, OSQP-based convex QP, EKF state estimation, and a modular actuator plugin architecture.
+tags: ["Python", "OSQP", "EKF", "FastAPI", "Control Systems"]
+visibility: public
+---
+
+## What it is
+
+Cortex is a Model Predictive Controller for a controlled-environment grow room. Three systems share one physics model (`core/dynamics.py:GrowRoomDynamics`):
+
+| System | Purpose |
+|---|---|
+| Simulator | Deterministic, headless runs for tuning + regression |
+| Solver | Production controller that publishes commands to the actuator bus |
+| Calibrator | Online parameter estimation against real sensor history |
+
+## Why a custom MPC instead of a PID
+
+Grow rooms are coupled systems. Adjusting humidity changes temperature; changing fan speed changes both, plus CO₂; adjusting lights changes everything. PID loops fight each other under coupling, and they don't plan — they only react.
+
+MPC plans. You give it a state vector, a model of how the state evolves under each actuator, and a goal trajectory, and it returns the **sequence of moves** that minimizes deviation over a horizon. The 7-state model captures the variables that matter (temp, humidity, VPD, CO₂, soil moisture, leaf-surface proxy, light); the OSQP convex QP solves the resulting problem in sub-100ms; the EKF cleans noisy sensor input into the state vector the planner expects.
+
+## Engineering notes
+
+- The dual solver — convex QP (OSQP) for the linearized common case, SLSQP shooting for the fully nonlinear fallback — has been a useful pattern. Production runs the fast path; the slow path is available when the linearization isn't good enough.
+- Profiles are first-class objects: precision / balanced / efficiency strategies adjust tolerances and weighting without changing the underlying model. The same chamber can be tuned for "exactly hit the target" or "stay close while saving energy" by swapping a profile.
+- Derived metrics — VPD (Tetens), dry-back rate (linear regression), DLI (trapezoidal) — live alongside raw sensors and flow through the same Redis → SQLite path.
+
+## Running it
+
+```bash
+pip install -r requirements.txt
+
+# 12-hour fast simulation with chart
+python main.py simulate --fast --duration 43200 --chart --profile hvacd_full
+
+# Production: solver + gateway + API + calibrator
+python main.py all
+```
+
+CLI subcommands map 1:1 to processes: `solver`, `gateway`, `api`, `calibrator`, `simulate`.
+
+## Where it lives
+
+Cortex is the brain of [Mycelium](/work/mycelium); it runs on a Raspberry Pi 5 and can be developed end-to-end in simulation on any laptop. Source lives in the same repo with a clean separation between physics, planner, and IO.

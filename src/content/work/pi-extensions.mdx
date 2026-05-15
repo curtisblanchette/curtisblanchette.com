@@ -1,0 +1,32 @@
+---
+title: Pi Extensions
+client: Open Source
+role: Author
+year: "2025"
+summary: Personal extensions for the Pi.dev coding-agent harness — commit / PR workflows and label hygiene, all in one TUI.
+tags: ["TypeScript", "TUI", "GitHub CLI", "AI Tooling"]
+visibility: public
+---
+
+## What it is
+
+A pack of personal extensions for [pi](https://github.com/earendil-works/pi) — the terminal coding-agent harness — installable from GitHub without cloning into your own pi setup.
+
+```bash
+pi install git:github.com/curtisblanchette/pi-extensions
+```
+
+| Extension | Commands | Best for |
+|---|---|---|
+| `commit-pr.ts` | `/commit`, `/commit-pr` | Stage files, write a Conventional Commit, push a branch, and open a draft PR — from one TUI. |
+| `prs.ts` | `/prs` | Browse open PRs, inspect CI state, checkout branches, update descriptions, run review workflows, and explain failures. |
+| `sync-pr-labels.ts` | `/sync-pr-labels` | Normalize a repo's PR workflow labels to the approved set. |
+
+## Why ship it
+
+Pi gives you a sane harness for AI coding sessions. Almost every session ends with the same handful of moves: a commit, a push, a PR, a label check, a CI inspection. These three extensions turn those moves into one keystroke each, with AI doing the parts that actually benefit from AI (writing the commit message, generating the PR description, explaining a failing CI run) and the human staying in the loop where it matters (which files, which labels, which review action).
+
+## Links
+
+- [github.com/curtisblanchette/pi-extensions](https://github.com/curtisblanchette/pi-extensions)
+- [pi.dev](https://pi.dev)

@@ -1,0 +1,50 @@
+---
+title: graphify-rs
+client: Open Source
+role: Maintainer
+year: "2025"
+summary: A Rust rewrite of the AI knowledge-graph builder — drop papers, code, notes, and screenshots into a /raw folder and get a queryable, audited graph.
+tags: ["Rust", "Knowledge Graphs", "CLI", "LLM Tooling"]
+visibility: public
+---
+
+## What it is
+
+Inspired by [Andrej Karpathy's `/raw` folder workflow](https://x.com/karpathy/status/1871129915774632404): drop anything into a folder — papers, tweets, screenshots, code, notes — and get a structured knowledge graph that surfaces what you didn't know was connected.
+
+Three things `graphify-rs` does that an LLM alone can't:
+
+| # | Feature | Why it matters |
+|---|---|---|
+| 1 | Persistent graph | Relationships survive across sessions. Query weeks later without re-reading. |
+| 2 | Honest audit trail | Every edge tagged `EXTRACTED`, `INFERRED`, or `AMBIGUOUS`. Facts vs. guesses, always clear. |
+| 3 | Cross-document surprise | Community detection finds connections you'd never think to ask about. |
+
+## Why a rewrite
+
+The original was a fine prototype. Two things pushed me to a Rust rewrite: (1) the graph build needed to be fast and reproducible enough to run on every commit of a research repo, and (2) the audit trail needed to be a first-class data type, not a comment in an extraction script. Rust gave me the right constraints for both.
+
+## Using it
+
+```bash
+cargo install graphify-rs
+
+# Build a knowledge graph (free, fast, no API key needed)
+graphify-rs build --no-llm
+
+# Explore interactively
+open graphify-out/graph.html
+
+# Query the graph
+graphify-rs query "how does auth work?"
+
+# (Optional) Add semantic extraction via Claude API
+graphify-rs build --llm anthropic
+```
+
+The interactive viewer is a single HTML file with a force-directed layout; the CLI query path is great for piping into other tools.
+
+## Links
+
+- [github.com/curtisblanchette/graphify-rs](https://github.com/curtisblanchette/graphify-rs) — fork + active development
+- Published on [crates.io](https://crates.io/crates/graphify-rs)

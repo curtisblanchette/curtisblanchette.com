@@ -1,0 +1,42 @@
+---
+title: Mycelium
+client: Personal R&D
+role: Architect & Engineer
+year: "2025"
+summary: An open-source framework for AI-powered IoT systems with ESP32 devices, MQTT, and local LLM intelligence.
+tags: ["ESP32", "MicroPython", "MQTT", "FastAPI", "Ollama", "React"]
+visibility: public
+---
+
+## What it is
+
+Mycelium is an open-source framework for building AI-powered IoT systems. ESP32 devices publish sensor telemetry and receive commands over MQTT; a local AI orchestrator runs Model Predictive Control (MPC) with a physics-based optimizer and an Ollama LLM for natural-language commands.
+
+It's the framework I always wanted when wiring up sensors: declare your hardware in a JSON registry, flash, and the rest — WiFi handshake, MQTT lifecycle, command acks, dashboard panels, charts — comes for free.
+
+## Architecture
+
+```
+   ┌──── ESP32 (MicroPython) ────┐         ┌──── Cortex backend ────┐
+   │  registry.json declares     │         │  FastAPI + asyncio     │
+   │  sensors + actuators        │ ──MQTT─▶│  MPC planner (OSQP)    │
+   │  HomeHubClient handles      │         │  Ollama intent parser  │
+   │  WiFi, sessions, telemetry  │ ◀──cmd──│  React dashboard       │
+   └─────────────────────────────┘         └────────────────────────┘
+```
+
+## Notable choices
+
+- **The device registry drives the UI.** When a device comes online, its birth message advertises its sensors and actuators. The React dashboard reads that birth message and dynamically builds the panel — toggles for `SWITCH`, momentary buttons for `PULSE`, live gauges, historical charts. No frontend code changes to support new hardware.
+- **Two MPC modes, one bus.** Cortex runs either an OSQP convex QP with a 7-state thermodynamic model and Extended Kalman Filter state estimation (sub-100ms solves), or a legacy SLSQP nonlinear-shooting planner. Both publish to the same MQTT topic; devices don't know whether a command came from MPC, the LLM, or the user.
+- **Hot / cold data split.** Redis holds 48 hours of high-resolution telemetry; SQLite aggregates the cold path. The dashboard reads both transparently.
+- **Voice + chat in the same pipeline.** Vosk for STT, Kokoro for TTS, Ollama for intent extraction — voice and chat resolve into the same structured intent JSON that the command bus already understands.
+
+## What works well
+
+A real grow chamber has been running on Mycelium long enough to teach me what control-systems theory leaves out: sensor noise, actuator latency, and the moments where a 7-state physics model is correct but completely unhelpful. The EKF + OSQP combination has held up. The LLM-as-intent-parser has held up. The framework has stayed boring enough to extend.
+
+## Links
+
+- [github.com/curtisblanchette/mycelium](https://github.com/curtisblanchette/mycelium)
+- Pairs naturally with [Cortex MPC](/work/cortex) — the planner subsystem extracted as a standalone project.

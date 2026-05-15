@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BRUTALIST DESIGN TOKENS
+   100% monospaced. 1px borders, no radius, no shadows. One accent.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-bg: #0a0a0a;
+  --color-fg: #fafafa;
+  --color-muted: #737373;
+  --color-faint: #404040;
+  --color-line: #262626;
+  --color-accent: #ff5500;
+  --color-accent-dim: #cc4400;
+
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --radius-none: 0;
+
+  --breakpoint-3xl: 110rem;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-feature-settings: "ss01", "ss02", "zero", "calt";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Tighten heading line-height across the board */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Utility primitives ───────────────────────────────────────────────────── */
+
+.text-accent {
+  color: var(--color-accent);
+}
+.text-muted {
+  color: var(--color-muted);
+}
+.text-faint {
+  color: var(--color-faint);
+}
+.bg-accent {
+  background: var(--color-accent);
+}
+.border-line {
+  border-color: var(--color-line);
+}
+
+/* Inverted hover — sharp swap, no transitions */
+.invert-on-hover {
+  transition: background-color 80ms linear, color 80ms linear;
+}
+.invert-on-hover:hover {
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+/* Accent-underline link */
+.link-accent {
+  position: relative;
+  display: inline-block;
+}
+.link-accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
+}
+.link-accent:hover {
+  color: var(--color-accent);
+}
+.link-accent:hover::after {
+  background: var(--color-accent);
+  opacity: 1;
+}
+
+/* Blinking caret — used at the end of hero copy */
+.caret::after {
+  content: "█";
+  display: inline-block;
+  margin-left: 0.15em;
+  color: var(--color-accent);
+  animation: blink 1.1s steps(2, start) infinite;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Marquee scroll for stack ticker */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 60s linear infinite;
+}
+
+/* Dotted column rules — used inside section grids */
+.col-rule {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-line) 0,
+    var(--color-line) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  width: 1px;
+}
+
+/* Subtle CRT scanline overlay — opt-in via .crt on a container */
+.crt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 3px
+  );
+}
+
+/* Code blocks (rehype-pretty-code outputs <pre data-theme>) */
+pre {
+  background: #050505 !important;
+  border: 1px solid var(--color-line);
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  font-family: var(--font-mono) !important;
+}
+code:not(pre code) {
+  background: #1a1a1a;
+  border: 1px solid var(--color-line);
+  padding: 1px 5px;
+  font-size: 0.875em;
+}
+
+/* Prose for MDX */
+.prose-brutalist {
+  color: var(--color-fg);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  max-width: 68ch;
+}
+.prose-brutalist p {
+  margin: 1em 0;
+}
+.prose-brutalist h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 3em;
+  margin-bottom: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--color-line);
+  padding-top: 1.5em;
+}
+.prose-brutalist h2::before {
+  content: "## ";
+  color: var(--color-accent);
+}
+.prose-brutalist h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+.prose-brutalist h3::before {
+  content: "### ";
+  color: var(--color-accent);
+}
+.prose-brutalist a {
+  color: var(--color-accent);
+  border-bottom: 1px solid var(--color-accent-dim);
+}
+.prose-brutalist a:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+.prose-brutalist blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.25em;
+  margin: 1.5em 0;
+  color: var(--color-muted);
+  font-style: normal;
+}
+.prose-brutalist ul,
+.prose-brutalist ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+.prose-brutalist ul li::marker {
+  content: "▸ ";
+  color: var(--color-accent);
+}
+.prose-brutalist hr {
+  border: 0;
+  border-top: 1px dashed var(--color-line);
+  margin: 2.5em 0;
+}
+.prose-brutalist img {
+  border: 1px solid var(--color-line);
+  margin: 1.5em 0;
+}
