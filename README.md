@@ -4,6 +4,8 @@ Personal site & working portfolio of **Curtis Blanchette** — Lead Software Eng
 
 Brutalist, mono, dark. 100% IBM Plex Mono, 1px borders, no rounded corners, one accent.
 
+> **Working on this project?** Start in [`docs/`](./docs/README.md) — architecture, design system, content model, and the active roadmap all live there.
+
 ```
    ┌─────────────────────────────────────────────────────────┐
    │  STATUS: ONLINE · LOC: KELOWNA, BC · UTC-07:00          │
@@ -41,36 +43,31 @@ pnpm start    # serve production build
 
 Node 20+ required. The site builds without env vars — `MEDIUM_USERNAME` defaults to `curtis.blanchette`.
 
-## Layout
+## Layout (top-level)
 
 ```
-src/
-├── app/
-│   ├── layout.tsx               # site chrome (Header + Footer)
-│   ├── page.tsx                 # home (composes all sections)
-│   ├── globals.css              # brutalist design tokens via @theme
-│   ├── sitemap.ts
-│   ├── not-found.tsx
-│   ├── work/[slug]/page.tsx     # case study route
-│   └── writing/[slug]/page.tsx  # essay route
-├── components/
-│   ├── header.tsx · footer.tsx
-│   ├── hero.tsx
-│   ├── section.tsx              # SectionHeader, Section, AsciiRule, FieldRow
-│   ├── crosshair.tsx
-│   ├── work-grid.tsx
-│   ├── timeline.tsx
-│   ├── stack-grid.tsx
-│   ├── off-hours.tsx
-│   └── writing-list.tsx
-├── content/
-│   ├── data/                    # work · career · stack · hobbies (TS data)
-│   ├── work/*.mdx               # case-study long-form
-│   └── writing/*.mdx            # essays
-└── lib/
-    ├── content.ts               # MDX loader
-    └── medium.ts                # Medium RSS fetcher
+curtisblanchette.com/
+├── docs/                          # internal documentation — START HERE
+│   ├── README.md                  # index
+│   ├── architecture.md            # how the site is wired
+│   ├── design-system.md           # brutalist tokens, primitives, dos/don'ts
+│   ├── content.md                 # data model + author workflow
+│   ├── roadmap.md                 # what's next
+│   └── plans/                     # implementation plans for upcoming work
+│
+├── raw/                           # local-only drop zone for source material
+│   └── README.md                  # convention; contents gitignored
+│
+├── public/                        # static assets shipped with the build
+│
+└── src/
+    ├── app/                       # Next.js App Router routes
+    ├── components/                # brutalist primitives
+    ├── content/                   # MDX + TS data files
+    └── lib/                       # content + medium
 ```
+
+For detailed maps of `src/` and the data flow, see [`docs/architecture.md`](./docs/architecture.md).
 
 ## Adding content
 

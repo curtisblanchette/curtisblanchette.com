@@ -1,0 +1,10 @@
+# /raw is a local-only drop zone for unstructured source material that gets
+# synthesized into MDX content. Everything in here is gitignored except this
+# .gitignore and the README that documents the convention.
+#
+# To preserve a specific raw artifact in git (e.g. an architecture sketch worth
+# keeping forever), add a `!path/to/file` exception below.
+
+*
+!.gitignore
+!README.md
