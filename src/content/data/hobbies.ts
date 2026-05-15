@@ -1,6 +1,6 @@
 export type Hobby = {
   title: string;
-  category: "MUSIC" | "BUILD" | "OUTDOOR" | "GAME";
+  category: "MUSIC" | "BUILD" | "OUTDOOR";
   blurb: string;
   detail?: string;
 };
@@ -26,13 +26,6 @@ export const HOBBIES: Hobby[] = [
     blurb:
       "ESP32 sensors, a Raspberry Pi running MPC, MQTT as the spine — a living workshop project that also keeps the basement chamber dialled in.",
     detail: "MicroPython · OSQP · EKF · Ollama on-device",
-  },
-  {
-    title: "Game tinkering",
-    category: "GAME",
-    blurb:
-      "Long-time GameMaker hobbyist; Clone Hero for warming the wrists between commits.",
-    detail: "GameMaker Studio 2 · ASCII roguelike experiments",
   },
   {
     title: "Writing",

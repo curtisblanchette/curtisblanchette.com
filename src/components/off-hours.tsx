@@ -4,7 +4,6 @@ const COLOR: Record<Hobby["category"], string> = {
   MUSIC: "text-accent",
   BUILD: "text-fg",
   OUTDOOR: "text-fg",
-  GAME: "text-muted",
 };
 
 export function OffHours() {
