@@ -30,7 +30,7 @@ export function Hero() {
           <div className="mt-6 border border-line p-4 text-[12px]">
             <FieldRow label="Role" value="Lead Software Engineer" />
             <FieldRow label="Org" value="Metalab" href="https://metalab.com" />
-            <FieldRow label="Base" value="Kelowna, BC · CA" />
+            <FieldRow label="Base" value="Salmon Arm, BC · CA" />
             <FieldRow label="Years" value="10+" />
             <FieldRow label="Status" value="Heads-down" />
           </div>

@@ -16,7 +16,7 @@ export function Header() {
         <span className="text-accent">●</span>
         <span>STATUS: ONLINE</span>
         <span className="text-faint">│</span>
-        <span>LOC: KELOWNA, BC</span>
+        <span>LOC: SALMON ARM, BC</span>
         <span className="text-faint">│</span>
         <span>UTC-07:00</span>
         <span className="flex-1" />
