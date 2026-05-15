@@ -64,7 +64,7 @@ export function Footer() {
               hello@curtisblanchette.com
             </a>
             <p className="mt-3 text-faint leading-relaxed">
-              No agencies. No recruiters. Real conversations welcome.
+              Real conversations welcome.
             </p>
           </div>
         </div>

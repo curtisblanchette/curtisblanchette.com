@@ -48,8 +48,8 @@ export default function HomePage() {
               named yet.
             </p>
             <p className="mt-4 text-sm text-muted max-w-2xl leading-relaxed">
-              No agencies pitching. No recruiters. Founders, engineering
-              leaders, fellow operators — please reach out.
+              Founders, engineering leaders, fellow operators — please reach
+              out.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.18em]">
               <a
