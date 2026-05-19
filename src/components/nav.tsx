@@ -25,6 +25,10 @@ export function Nav() {
 
         <div className="cb-nav__links">
           <Link href="/work">Work</Link>
+          {/* Section anchor on home — not a dedicated route. When the
+              learning centre outgrows a single homepage block, swap to
+              "/learn" and add a route. */}
+          <Link href="/#learn">Learn</Link>
           <Link href="/writing">Writing</Link>
           <a
             href="mailto:hello@curtisblanchette.com"

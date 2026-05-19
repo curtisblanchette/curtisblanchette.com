@@ -69,11 +69,13 @@ export function themeClassFor(id: ThemeId): string {
  * every request.
  *
  * Behaviour:
- *   1. Read stored theme id.
- *   2. If it matches a legacy brutalist id, migrate to the kit equivalent
- *      and write the new id back to storage.
- *   3. If it doesn't match any known kit id, fall back to DEFAULT_THEME.
- *   4. Add `cb-theme-<id>` to <html>'s classList.
+ *   1. <html> is SSR'd with `cb-theme-<DEFAULT_THEME>` already on it,
+ *      so a JS-blocked visitor sees the default accent immediately.
+ *   2. Read stored theme id from localStorage.
+ *   3. Migrate legacy brutalist ids to their kit equivalents in-place.
+ *   4. If the stored id differs from the default, strip the default
+ *      class and add the stored one — yielding exactly one
+ *      `cb-theme-*` class on <html> at all times.
  */
 export const PRE_HYDRATION_SCRIPT = `(function(){try{
   var k='${THEME_STORAGE_KEY}';
@@ -83,5 +85,9 @@ export const PRE_HYDRATION_SCRIPT = `(function(){try{
   var v=localStorage.getItem(k);
   if(v&&Object.prototype.hasOwnProperty.call(legacy,v)){v=legacy[v];localStorage.setItem(k,v);}
   if(!v||ok.indexOf(v)<0){v=d;}
-  document.documentElement.classList.add('cb-theme-'+v);
-}catch(e){document.documentElement.classList.add('cb-theme-${DEFAULT_THEME}');}})();`;
+  if(v!==d){
+    var c=document.documentElement.classList;
+    c.remove('cb-theme-'+d);
+    c.add('cb-theme-'+v);
+  }
+}catch(e){/* SSR default already applied */}})();`;

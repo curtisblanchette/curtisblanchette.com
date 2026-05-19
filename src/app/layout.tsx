@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { PRE_HYDRATION_SCRIPT } from "@/lib/themes";
+import { DEFAULT_THEME, PRE_HYDRATION_SCRIPT, themeClassFor } from "@/lib/themes";
 import { basis, eiko, plex } from "./fonts";
 import "./globals.css";
 
@@ -51,7 +51,11 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${basis.variable} ${eiko.variable} ${plex.variable}`}
+      // Bake the default accent into the server-rendered HTML so a
+      // JS-blocked / pre-hydration visitor still sees the intended
+      // palette. The pre-hydration script below swaps it only when the
+      // visitor has chosen a non-default theme.
+      className={`${basis.variable} ${eiko.variable} ${plex.variable} ${themeClassFor(DEFAULT_THEME)}`}
     >
       <head>
         {/* Pre-hydration: migrate legacy theme ids, then apply the kit
