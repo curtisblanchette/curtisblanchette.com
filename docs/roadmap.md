@@ -25,6 +25,7 @@ A living list of what's next. Newest at top. Drop completed items at the bottom 
 
 ## Done
 
+- [x] **Theme system** — 4 hot-swappable themes (Brutalist / Paper / Terminal / Vapor) via `[data-theme]` + CSS variables. Pre-hydration script avoids FOUC. Switcher in header status bar.
 - [x] Initial scaffold — Next 15 + Tailwind 4 + brutalist primitives + 11 case studies + The Quiet Trade essay.
 - [x] Atlantic case study reframed as **The Atlantic Labs** (umbrella engagement) with Take as one experiment under it.
 - [x] AI-generated portrait in hero (color, not grayscale).

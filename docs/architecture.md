@@ -118,6 +118,18 @@ If the MDX is missing, the slug page renders the in-progress placeholder. Either
 
 - **Force-pushed history is not gone immediately.** GitHub keeps unreachable commits accessible by direct SHA URL for ~90 days. The only immediate purge is repo-delete-then-recreate. If you ever amend something sensitive, delete + recreate (cheap because the repo has no forks/stars to lose).
 
+## Theming
+
+- All color decisions are CSS variables, defined in `src/app/globals.css`.
+- The default values live inside Tailwind v4's `@theme` block; per-theme overrides are plain CSS selectors `[data-theme="..."]` immediately below.
+- The theme registry is `src/lib/themes.ts` (id, label, description, swatches).
+- The active theme is stored in `localStorage` under key `cb.theme`.
+- An inline blocking `<script>` in `app/layout.tsx` (`PRE_HYDRATION_SCRIPT` from `themes.ts`) reads the stored value and sets `<html data-theme="...">` before React mounts. This is what prevents FOUC and hydration mismatch.
+- The `<ThemeSwitcher />` client component reads the live attribute on mount, persists changes to localStorage, and updates the DOM. No reload, no route change.
+- Tailwind utilities (`bg-bg`, `text-fg`, `text-accent`, `border-line`, etc.) emit `var(--color-...)` and follow the active theme automatically. Components do not need theme-aware logic.
+
+Full theme reference: [`design-system.md`](./design-system.md#themes).
+
 ## Branch strategy
 
 Trunk-based on `main`. Force-push allowed during initial setup; once content stabilizes, switch to PR-only.

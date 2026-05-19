@@ -2,11 +2,14 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   BRUTALIST DESIGN TOKENS
-   100% monospaced. 1px borders, no radius, no shadows. One accent.
+   BRUTALIST DESIGN TOKENS — themeable via [data-theme="..."]
+   100% monospaced. 1px borders, no radius, no shadows. One accent per theme.
    ──────────────────────────────────────────────────────────────────────────── */
 
 @theme {
+  /* These are the DEFAULT tokens. They match data-theme="brutalist" below.
+     Per-theme blocks override the same custom properties; Tailwind utilities
+     (bg-bg, text-fg, border-line, text-accent, …) resolve through the var. */
   --color-bg: #0a0a0a;
   --color-fg: #fafafa;
   --color-muted: #737373;
@@ -14,15 +17,87 @@
   --color-line: #262626;
   --color-accent: #30d158;
   --color-accent-dim: #21a040;
+  --color-code-bg: #1a1a1a;
+  --color-code-block-bg: #050505;
 
   --font-mono:
     "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
   --radius-none: 0;
-
   --breakpoint-3xl: 110rem;
 }
+
+/* ─── Theme: BRUTALIST (default · dark · system green) ────────────────────── */
+[data-theme="brutalist"] {
+  --color-bg: #0a0a0a;
+  --color-fg: #fafafa;
+  --color-muted: #737373;
+  --color-faint: #404040;
+  --color-line: #262626;
+  --color-accent: #30d158;
+  --color-accent-dim: #21a040;
+  --color-code-bg: #1a1a1a;
+  --color-code-block-bg: #050505;
+}
+
+/* ─── Theme: PAPER (light · cream · burnt orange) ─────────────────────────── */
+[data-theme="paper"] {
+  --color-bg: #f4f0e8;
+  --color-fg: #1a1a1a;
+  --color-muted: #6b6b6b;
+  --color-faint: #b8b3a8;
+  --color-line: #d4cfc4;
+  --color-accent: #c2410c;
+  --color-accent-dim: #7c2d12;
+  --color-code-bg: #e8e2d3;
+  --color-code-block-bg: #ebe5d6;
+}
+
+/* ─── Theme: TERMINAL (jet black · phosphor green) ────────────────────────── */
+[data-theme="terminal"] {
+  --color-bg: #000000;
+  --color-fg: #00ff66;
+  --color-muted: #00a043;
+  --color-faint: #007030;
+  --color-line: #003318;
+  --color-accent: #00ff66;
+  --color-accent-dim: #00a043;
+  --color-code-bg: #001a0c;
+  --color-code-block-bg: #000a04;
+}
+
+/* ─── Theme: VAPOR (deep navy · hot magenta) ──────────────────────────────── */
+[data-theme="vapor"] {
+  --color-bg: #0d0221;
+  --color-fg: #fefefe;
+  --color-muted: #8b7eff;
+  --color-faint: #4b3a8c;
+  --color-line: #2d1b4e;
+  --color-accent: #ff2bd6;
+  --color-accent-dim: #b81e9d;
+  --color-code-bg: #1a0a35;
+  --color-code-block-bg: #07011a;
+}
+
+/* ─── Theme: TERMINAL scanline overlay (opt-in for the CRT feel) ──────────── */
+[data-theme="terminal"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 255, 102, 0.025) 2px,
+    rgba(0, 255, 102, 0.025) 3px
+  );
+  mix-blend-mode: screen;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
 
 * {
   border-color: var(--color-line);
@@ -37,6 +112,9 @@ body {
   font-feature-settings: "ss01", "ss02", "zero", "calt";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 ::selection {
@@ -44,7 +122,6 @@ body {
   color: var(--color-bg);
 }
 
-/* Tighten heading line-height across the board */
 h1,
 h2,
 h3,
@@ -60,23 +137,13 @@ a {
 
 /* ─── Utility primitives ───────────────────────────────────────────────────── */
 
-.text-accent {
-  color: var(--color-accent);
-}
-.text-muted {
-  color: var(--color-muted);
-}
-.text-faint {
-  color: var(--color-faint);
-}
-.bg-accent {
-  background: var(--color-accent);
-}
-.border-line {
-  border-color: var(--color-line);
-}
+.text-accent { color: var(--color-accent); }
+.text-muted { color: var(--color-muted); }
+.text-faint { color: var(--color-faint); }
+.bg-accent { background: var(--color-accent); }
+.border-line { border-color: var(--color-line); }
 
-/* Inverted hover — sharp swap, no transitions */
+/* Inverted hover — sharp swap, fast transition */
 .invert-on-hover {
   transition: background-color 80ms linear, color 80ms linear;
 }
@@ -108,7 +175,7 @@ a {
   opacity: 1;
 }
 
-/* Blinking caret — used at the end of hero copy */
+/* Blinking caret */
 .caret::after {
   content: "█";
   display: inline-block;
@@ -122,20 +189,21 @@ a {
   }
 }
 
-/* Marquee scroll for stack ticker */
+/* Marquee */
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 .marquee-track {
   animation: marquee 60s linear infinite;
 }
 
-/* Dotted column rules — used inside section grids */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .caret::after { animation: none; }
+}
+
+/* Dotted column rules */
 .col-rule {
   background-image: repeating-linear-gradient(
     to bottom,
@@ -147,24 +215,9 @@ a {
   width: 1px;
 }
 
-/* Subtle CRT scanline overlay — opt-in via .crt on a container */
-.crt::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 2px,
-    rgba(255, 255, 255, 0.015) 2px,
-    rgba(255, 255, 255, 0.015) 3px
-  );
-}
-
-/* Code blocks (rehype-pretty-code outputs <pre data-theme>) */
+/* Code */
 pre {
-  background: #050505 !important;
+  background: var(--color-code-block-bg) !important;
   border: 1px solid var(--color-line);
   padding: 1rem;
   overflow-x: auto;
@@ -177,22 +230,20 @@ pre code {
   font-family: var(--font-mono) !important;
 }
 code:not(pre code) {
-  background: #1a1a1a;
+  background: var(--color-code-bg);
   border: 1px solid var(--color-line);
   padding: 1px 5px;
   font-size: 0.875em;
 }
 
-/* Prose for MDX */
+/* Prose */
 .prose-brutalist {
   color: var(--color-fg);
   font-size: 0.9375rem;
   line-height: 1.75;
   max-width: 68ch;
 }
-.prose-brutalist p {
-  margin: 1em 0;
-}
+.prose-brutalist p { margin: 1em 0; }
 .prose-brutalist h2 {
   font-size: 1.25rem;
   font-weight: 600;

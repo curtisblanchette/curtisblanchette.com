@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { DEFAULT_THEME, PRE_HYDRATION_SCRIPT } from "@/lib/themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -46,7 +47,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme={DEFAULT_THEME} suppressHydrationWarning>
+      <head>
+        {/* Pre-hydration: read the stored theme and set data-theme before
+            React mounts. Eliminates FOUC and hydration mismatch. */}
+        <script
+          dangerouslySetInnerHTML={{ __html: PRE_HYDRATION_SCRIPT }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1">{children}</main>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const NAV = [
   { href: "/", label: "INDEX" },
@@ -20,6 +21,8 @@ export function Header() {
         <span className="text-faint">│</span>
         <span>UTC-07:00</span>
         <span className="flex-1" />
+        <ThemeSwitcher />
+        <span className="text-faint">│</span>
         <span>v1.0.0</span>
       </div>
 

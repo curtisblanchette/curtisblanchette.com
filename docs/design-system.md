@@ -4,18 +4,44 @@ The whole point: this site should look like a `man` page that learned about CSS 
 
 ## Tokens
 
-Defined once in `src/app/globals.css` via Tailwind v4 `@theme`:
+All colors are theme-scoped CSS variables. The defaults live in Tailwind v4's `@theme` block in `src/app/globals.css`; per-theme blocks (`[data-theme="..."]`) override the same variable names. Tailwind utilities (`bg-bg`, `text-fg`, `text-accent`, `border-line`) all emit `var(--color-...)`, so swapping `<html data-theme="...">` cascades through every utility automatically — no class-level rewrites.
 
-| Token | Value | Use |
+| Token | Default (`brutalist`) | Use |
 |---|---|---|
 | `--color-bg` | `#0a0a0a` | Page background |
 | `--color-fg` | `#fafafa` | Primary text |
 | `--color-muted` | `#737373` | Secondary text, dates, labels |
 | `--color-faint` | `#404040` | Disabled / decorative |
 | `--color-line` | `#262626` | All 1px borders and rules |
-| `--color-accent` | `#30d158` | The one accent (system green, Apple `systemGreen` dark). Reserved. |
+| `--color-accent` | `#30d158` | The one accent (Apple `systemGreen` dark). Reserved. |
 | `--color-accent-dim` | `#21a040` | Underlines on accent links, pressed states |
-| `--font-mono` | IBM Plex Mono + system mono fallbacks | The only font |
+| `--color-code-bg` | `#1a1a1a` | Inline `<code>` background |
+| `--color-code-block-bg` | `#050505` | `<pre>` block background |
+| `--font-mono` | IBM Plex Mono + system mono fallbacks | The only font (constant across themes) |
+
+## Themes
+
+Four themes ship. The active theme is stored in `localStorage` under `cb.theme` and applied to `<html data-theme="...">` by an inline pre-hydration script (see [`architecture.md`](./architecture.md#theming)). The switcher UI lives in the header status bar.
+
+| Theme | bg | fg | accent | Vibe |
+|---|---|---|---|---|
+| `brutalist` (default) | `#0a0a0a` | `#fafafa` | `#30d158` | Near-black, system green. The home palette. |
+| `paper` | `#f4f0e8` | `#1a1a1a` | `#c2410c` | Cream and ink, burnt-orange accent. Light brutalist. |
+| `terminal` | `#000000` | `#00ff66` | `#00ff66` | CRT phosphor. Scanline overlay applied automatically. |
+| `vapor` | `#0d0221` | `#fefefe` | `#ff2bd6` | Synthwave. Deep navy + hot magenta. |
+
+Add a new theme:
+1. Register it in `src/lib/themes.ts` (`THEMES` array, with `id`, `label`, `description`, three `swatches`).
+2. Add a `[data-theme="<id>"] { ... }` block in `src/app/globals.css` overriding every `--color-*` token.
+3. Done — it appears in the switcher and is selectable.
+
+### Theme-aware patterns
+
+- **Never hardcode a color** in a component. Use the tokens or Tailwind utilities that resolve to them.
+- **SVG assets in `public/`** are static and don't pick up theme changes. The hardcoded brutalist palette in the work-card SVGs is intentional — they read as embedded artwork rather than chrome. If you need theme-following inline graphics, render the SVG as a React component and use `currentColor` + `var(--color-...)`.
+- **Code highlighting** is via Shiki with a fixed `github-dark-dimmed` theme. The surrounding `<pre>` / `<code>` chrome follows the active theme via the code-bg tokens; only the *syntax* colors are fixed. This is intentional — swapping syntax themes per UI theme would require a build-time matrix.
+- **The blinking caret and marquee** respect `prefers-reduced-motion`.
+
 
 ## Rules
 
