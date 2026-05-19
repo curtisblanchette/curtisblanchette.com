@@ -5,11 +5,16 @@
  * Re-encodes a raw video for web delivery from public/videos/ on
  * S3 + CloudFront, plus extracts a poster frame.
  *
- *     pnpm video:optimize <path-to-source.mp4>
+ *     pnpm video:optimize <path-to-source.mp4> [--poster=<HH:MM:SS|seconds>]
  *
  * Output (alongside ../public/videos/):
  *   - <slug>.mp4              h.264 + AAC, 720p30, ~2 Mbps, faststart
- *   - <slug>.poster.jpg       2s-in frame, 1280x720, quality 4
+ *   - <slug>.poster.jpg       frame at --poster (default 00:00:02),
+ *                             1280x720, quality 3
+ *
+ * Pick the poster timestamp by scrubbing the source and finding the
+ * single frame that best telegraphs the lesson (often a key slide,
+ * not the cold-open face).
  *
  * The source file is left untouched. Drop sources into raw/learn/<slug>/
  * (gitignored per raw/.gitignore) so the heavy original stays local.
@@ -41,9 +46,13 @@ if (ffmpeg.status !== 0) {
   die("ffmpeg not found on PATH. Install with `brew install ffmpeg`.");
 }
 
-const src = process.argv[2];
+const args = process.argv.slice(2);
+const posterFlag = args.find((a) => a.startsWith("--poster="));
+const posterAt = posterFlag ? posterFlag.split("=", 2)[1] : "00:00:02";
+const positional = args.filter((a) => !a.startsWith("--"));
+const src = positional[0];
 if (!src) {
-  die("Usage: pnpm video:optimize <path-to-source.mp4>");
+  die("Usage: pnpm video:optimize <path-to-source.mp4> [--poster=<HH:MM:SS|seconds>]");
 }
 const srcAbs = resolve(src);
 if (!existsSync(srcAbs)) die(`Source not found: ${srcAbs}`);
@@ -83,19 +92,19 @@ console.log("\n→ Encoding…");
 let res = spawnSync("ffmpeg", encodeArgs, { stdio: "inherit" });
 if (res.status !== 0) die(`ffmpeg encode failed (${res.status})`);
 
-// Poster frame at 2 seconds — usually past the "hi, I'm" beat and into
-// a settled expression.
+// Poster frame at --poster (default 2s). For explainer-style videos
+// a thesis-slide timestamp usually beats the cold-open face shot.
 const posterArgs = [
   "-y",
-  "-ss", "00:00:02",
+  "-ss", posterAt,
   "-i", srcAbs,
   "-vframes", "1",
   "-vf", "scale=-2:720",
-  "-q:v", "4",
+  "-q:v", "3",
   outPoster,
 ];
 
-console.log("\n→ Extracting poster…");
+console.log(`\n→ Extracting poster at ${posterAt}…`);
 res = spawnSync("ffmpeg", posterArgs, { stdio: "inherit" });
 if (res.status !== 0) die(`ffmpeg poster failed (${res.status})`);
 
