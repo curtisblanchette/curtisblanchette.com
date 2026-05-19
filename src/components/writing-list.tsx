@@ -1,114 +1,86 @@
 import Link from "next/link";
-import { listMdx, type WritingFrontmatter, formatDate } from "@/lib/content";
-import { getMediumPosts, formatPubDate } from "@/lib/medium";
+import { listMdx, type WritingFrontmatter } from "@/lib/content";
+import { getMediumPosts } from "@/lib/medium";
+import { EssayList, type EssayRow } from "./essay-list";
 
-export async function WritingList() {
+/**
+ * Composes EssayList with both local MDX and the Medium RSS feed.
+ *
+ * - `limit` caps the number of local rows (used on home).
+ * - `showMedium` controls whether the Medium feed is appended below
+ *   (true on /writing index, false on home — which has its own CTA).
+ *
+ * Date formatting: "YYYY · MM" to match the kit's mono date slot.
+ * Read-time: not stored in our frontmatter today, so omitted.
+ */
+export async function WritingList({
+  limit,
+  showMedium = false,
+}: {
+  limit?: number;
+  showMedium?: boolean;
+}) {
   const [local, medium] = await Promise.all([
     listMdx("writing"),
-    getMediumPosts(),
+    showMedium ? getMediumPosts() : Promise.resolve([]),
   ]);
 
-  const localItems = local
-    .map((e) => ({
-      kind: "local" as const,
-      slug: e.slug,
-      data: e.data as WritingFrontmatter,
-    }))
+  const localRows: EssayRow[] = local
+    .map((e) => ({ slug: e.slug, data: e.data as WritingFrontmatter }))
     .filter((e) => !e.data.draft)
-    .sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+    .sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date))
+    .slice(0, limit ?? local.length)
+    .map((p) => ({
+      href: `/writing/${p.slug}`,
+      date: formatRowDate(p.data.date),
+      title: p.data.title,
+    }));
+
+  const mediumRows: EssayRow[] = medium.map((p) => ({
+    href: p.link,
+    date: formatRowDate(p.pubDate),
+    title: p.title,
+    external: true,
+  }));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      {/* Local essays */}
-      <div className="lg:col-span-7">
-        <div className="text-[10px] uppercase tracking-[0.22em] text-accent mb-4">
-          {"//"} Essays
-        </div>
-        <ul className="divide-y divide-line border-y border-line">
-          {localItems.length === 0 ? (
-            <li className="py-6 text-sm text-muted">
-              No essays yet — draft in progress.
-            </li>
-          ) : null}
-          {localItems.map((p) => (
-            <li key={p.slug}>
-              <Link
-                href={`/writing/${p.slug}`}
-                className="block py-5 hover:bg-[#111] -mx-3 px-3 group"
-              >
-                <div className="flex items-baseline gap-3">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-muted w-24 shrink-0">
-                    {formatDate(p.data.date)}
-                  </span>
-                  <div className="flex-1">
-                    <div className="text-base font-semibold tracking-tight group-hover:text-accent">
-                      {p.data.title}
-                    </div>
-                    <p className="mt-1 text-sm text-muted leading-snug line-clamp-2">
-                      {p.data.description}
-                    </p>
-                  </div>
-                  <span className="text-faint group-hover:text-accent text-sm">→</span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div>
+      {localRows.length > 0 ? <EssayList rows={localRows} /> : null}
 
-      {/* Medium feed */}
-      <div className="lg:col-span-5">
-        <div className="text-[10px] uppercase tracking-[0.22em] text-accent mb-4 flex items-center justify-between">
-          <span>{"//"} Medium</span>
-          <a
-            href="https://medium.com/@curtis.blanchette"
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted hover:text-accent"
+      {showMedium && mediumRows.length > 0 ? (
+        <div style={{ marginTop: 64 }}>
+          <p
+            className="cb-eyebrow"
+            style={{ marginBottom: 24 }}
           >
-            FOLLOW →
-          </a>
+            Elsewhere · Medium
+          </p>
+          <EssayList rows={mediumRows.slice(0, 12)} />
         </div>
-        <ul className="border border-line divide-y divide-line bg-[#0a0a0a]">
-          {medium.length === 0 ? (
-            <li className="p-4 text-sm text-muted">
-              <span className="text-faint">[ feed offline ]</span> Medium RSS is
-              unreachable from the build at the moment. Visit{" "}
-              <a
-                href="https://medium.com/@curtis.blanchette"
-                className="link-accent text-accent"
-                target="_blank"
-                rel="noreferrer"
-              >
-                medium.com/@curtis.blanchette
-              </a>
-              .
-            </li>
-          ) : null}
-          {medium.slice(0, 8).map((p) => (
-            <li key={p.link}>
-              <a
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-                className="block p-4 hover:bg-[#111] group"
-              >
-                <div className="text-[10px] uppercase tracking-[0.22em] text-muted">
-                  {formatPubDate(p.pubDate)}
-                </div>
-                <div className="mt-1 text-sm font-semibold group-hover:text-accent leading-snug">
-                  {p.title}
-                </div>
-                {p.description ? (
-                  <p className="mt-1.5 text-xs text-muted leading-snug line-clamp-2">
-                    {p.description}
-                  </p>
-                ) : null}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      ) : null}
+
+      {showMedium && mediumRows.length === 0 ? (
+        <p
+          className="cb-body-md"
+          style={{ marginTop: 48, color: "var(--fg-2)" }}
+        >
+          More on Medium —{" "}
+          <Link
+            href="https://medium.com/@curtis.blanchette"
+            className="cb-link"
+          >
+            medium.com/@curtis.blanchette
+          </Link>
+        </p>
+      ) : null}
     </div>
   );
+}
+
+function formatRowDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  return `${y} · ${m}`;
 }

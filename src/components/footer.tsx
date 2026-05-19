@@ -1,34 +1,52 @@
-import { AsciiRule } from "./section";
+import Link from "next/link";
+import { NOW } from "@/content/data/now";
 
+/**
+ * Site footer. 4-column grid (brand · Site · Elsewhere · Colophon),
+ * collapses to a single column under md. Direct port of
+ * `docs/cb-site-kit/components/footer.html`.
+ */
 export function Footer() {
-  const year = new Date().getFullYear();
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+
   return (
-    <footer className="mt-16 border-t border-line px-6 md:px-10 py-10 text-xs">
-      <div className="mx-auto max-w-6xl">
-        <AsciiRule />
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-muted">
-          <div>
-            <div className="text-fg uppercase tracking-[0.18em] mb-2">
-              © {year} Curtis Blanchette
-            </div>
-            <p className="leading-relaxed">
-              Built with Next.js, Tailwind CSS, and a deliberate refusal of
-              rounded corners.
+    <footer className="cb-footer">
+      <div className="cb-container cb-container--bleed">
+        <div className="cb-footer__grid">
+          <div className="cb-footer__brand">
+            <p className="cb-footer__brand-name">Curtis Blanchette</p>
+            <p className="cb-footer__brand-tag">
+              Lead software engineer. Building the quiet parts.
             </p>
+            <span
+              className="cb-pill"
+              style={{ alignSelf: "flex-start" }}
+            >
+              <i className="cb-dot" aria-hidden /> {NOW.statusPill}
+            </span>
           </div>
+
           <div>
-            <div className="text-fg uppercase tracking-[0.18em] mb-2">
-              Elsewhere
-            </div>
-            <ul className="space-y-1">
+            <h3 className="cb-footer__heading">Site</h3>
+            <ul className="cb-footer__list">
+              <li><Link href="/work">Work</Link></li>
+              <li><Link href="/writing">Writing</Link></li>
+              <li><Link href="/#contact">Contact</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="cb-footer__heading">Elsewhere</h3>
+            <ul className="cb-footer__list">
               <li>
                 <a
                   href="https://github.com/curtisblanchette"
                   target="_blank"
                   rel="noreferrer"
-                  className="link-accent"
                 >
-                  github.com/curtisblanchette
+                  GitHub <span className="cb-arrow">↗</span>
                 </a>
               </li>
               <li>
@@ -36,9 +54,8 @@ export function Footer() {
                   href="https://linkedin.com/in/curtisblanchette"
                   target="_blank"
                   rel="noreferrer"
-                  className="link-accent"
                 >
-                  linkedin.com/in/curtisblanchette
+                  LinkedIn <span className="cb-arrow">↗</span>
                 </a>
               </li>
               <li>
@@ -46,29 +63,55 @@ export function Footer() {
                   href="https://medium.com/@curtis.blanchette"
                   target="_blank"
                   rel="noreferrer"
-                  className="link-accent"
                 >
-                  medium.com/@curtis.blanchette
+                  Medium <span className="cb-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:hello@curtisblanchette.com">
+                  Email <span className="cb-arrow">↗</span>
                 </a>
               </li>
             </ul>
           </div>
+
           <div>
-            <div className="text-fg uppercase tracking-[0.18em] mb-2">
-              Contact
-            </div>
-            <a
-              href="mailto:hello@curtisblanchette.com"
-              className="link-accent"
-            >
-              hello@curtisblanchette.com
-            </a>
-            <p className="mt-3 text-faint leading-relaxed">
-              Real conversations welcome.
-            </p>
+            <h3 className="cb-footer__heading">Colophon</h3>
+            <ul className="cb-footer__list">
+              <li>
+                <span
+                  className="cb-mono"
+                  style={{ fontSize: 14, color: "var(--fg-2)" }}
+                >
+                  Basis Grotesque Pro
+                </span>
+              </li>
+              <li>
+                <span
+                  className="cb-mono"
+                  style={{ fontSize: 14, color: "var(--fg-2)" }}
+                >
+                  PP Eiko
+                </span>
+              </li>
+              <li>
+                <span
+                  className="cb-mono"
+                  style={{ fontSize: 14, color: "var(--fg-2)" }}
+                >
+                  IBM Plex Mono
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
-        <AsciiRule className="mt-8" />
+
+        <div className="cb-footer__bottom">
+          <span>© {year} — Curtis Blanchette</span>
+          <span>
+            v {year}.{month} · hand-built
+          </span>
+        </div>
       </div>
     </footer>
   );

@@ -2,19 +2,23 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ALL_THEME_CLASSNAMES,
   DEFAULT_THEME,
-  isThemeId,
   THEMES,
   THEME_STORAGE_KEY,
+  themeClassFor,
   type ThemeId,
 } from "@/lib/themes";
 
 /**
- * Brutalist theme switcher.
+ * Accent theme picker.
  *
- * Sits in the status bar. Renders `[THEME: BRUTALIST ▾]` and pops a menu on
- * click. Persists to localStorage; the inline pre-hydration script in
- * `app/layout.tsx` reads the same key on the next paint to avoid FOUC.
+ * Reads the current theme from <html>'s classList on mount (set there by
+ * the pre-hydration script in `app/layout.tsx`), and applies new themes
+ * by swapping the `cb-theme-*` className.
+ *
+ * Renders as a small ghost button in the nav; opens a kit-styled menu of
+ * swatch + label rows.
  */
 export function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
@@ -25,14 +29,20 @@ export function ThemeSwitcher() {
   // Read whatever the pre-hydration script already set on <html>.
   useEffect(() => {
     setMounted(true);
-    const fromDom = document.documentElement.getAttribute("data-theme");
-    if (isThemeId(fromDom)) {
-      setCurrent(fromDom);
+    const html = document.documentElement;
+    const found = THEMES.find((t) => html.classList.contains(t.className));
+    if (found) {
+      setCurrent(found.id);
       return;
     }
+    // Fallback: storage. The pre-hydration script normally handles this.
     try {
       const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      if (isThemeId(stored)) setCurrent(stored);
+      const t = THEMES.find((x) => x.id === stored);
+      if (t) {
+        html.classList.add(t.className);
+        setCurrent(t.id);
+      }
     } catch {
       /* private mode etc — keep default */
     }
@@ -56,7 +66,9 @@ export function ThemeSwitcher() {
   }, [open]);
 
   const apply = useCallback((id: ThemeId) => {
-    document.documentElement.setAttribute("data-theme", id);
+    const html = document.documentElement;
+    ALL_THEME_CLASSNAMES.forEach((cls) => html.classList.remove(cls));
+    html.classList.add(themeClassFor(id));
     try {
       localStorage.setItem(THEME_STORAGE_KEY, id);
     } catch {
@@ -66,23 +78,22 @@ export function ThemeSwitcher() {
     setOpen(false);
   }, []);
 
-  const label = THEMES.find((t) => t.id === current)?.label ?? "Brutalist";
+  const label = THEMES.find((t) => t.id === current)?.label ?? "Sodium";
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="cb-theme-switcher">
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label="Select accent theme"
         onClick={() => setOpen((v) => !v)}
-        className="border border-line px-2 py-0.5 hover:text-accent hover:border-accent focus:outline-none focus-visible:border-accent focus-visible:text-accent"
+        className="cb-btn cb-btn--ghost cb-btn--sm"
       >
-        <span className="text-muted">THEME:</span>{" "}
-        <span className="text-fg">
-          {/* Render the label only once mounted so SSR + client agree. */}
-          {mounted ? label.toUpperCase() : "—"}
-        </span>{" "}
-        <span aria-hidden className="text-faint">
+        <span className="cb-theme-switcher__label">
+          {mounted ? label : "—"}
+        </span>
+        <span aria-hidden className="cb-theme-switcher__caret">
           {open ? "▴" : "▾"}
         </span>
       </button>
@@ -90,8 +101,8 @@ export function ThemeSwitcher() {
       {open ? (
         <ul
           role="listbox"
-          aria-label="Select theme"
-          className="absolute right-0 top-[calc(100%+4px)] z-50 min-w-[240px] border border-line bg-[var(--color-bg)] py-1 text-[10px] uppercase tracking-[0.2em]"
+          aria-label="Accent theme"
+          className="cb-theme-switcher__menu"
         >
           {THEMES.map((t) => {
             const selected = t.id === current;
@@ -102,25 +113,24 @@ export function ThemeSwitcher() {
                   role="option"
                   aria-selected={selected}
                   onClick={() => apply(t.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 hover:bg-[var(--color-fg)] hover:text-[var(--color-bg)] ${
-                    selected ? "text-accent" : "text-fg"
-                  }`}
+                  className="cb-theme-switcher__row"
+                  data-selected={selected || undefined}
                 >
-                  <span aria-hidden className="w-3 shrink-0">
-                    {selected ? "▸" : " "}
-                  </span>
-                  <span className="flex shrink-0 gap-[2px]" aria-hidden>
+                  <span
+                    className="cb-theme-switcher__swatches"
+                    aria-hidden
+                  >
                     {t.swatches.map((c, i) => (
                       <span
                         key={i}
                         style={{ background: c }}
-                        className="block w-2 h-3 border border-line"
+                        className="cb-theme-switcher__swatch"
                       />
                     ))}
                   </span>
-                  <span className="flex-1 text-left">{t.label}</span>
+                  <span className="cb-theme-switcher__name">{t.label}</span>
                   {selected ? (
-                    <span className="text-accent" aria-hidden>
+                    <span aria-hidden className="cb-theme-switcher__check">
                       ✓
                     </span>
                   ) : null}

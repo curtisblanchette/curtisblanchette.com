@@ -1,0 +1,286 @@
+/* =========================================================
+   cb-site-kit — design tokens
+   ---------------------------------------------------------
+   Copy this file into your site as-is. Every component class
+   in components.css reads from these custom properties; theme
+   the whole system by overriding them on :root.
+
+   Fonts: Basis Grotesque Pro (brand sans + display),
+          PP Eiko (accent serif — moments of impact only),
+          IBM Plex Mono (micro labels, terminal accents).
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* PP Eiko — accent serif */
+@font-face { font-family: "PP Eiko"; font-weight: 300; font-style: normal; font-display: swap; src: url("fonts/PPEiko-Light.ttf") format("truetype"); }
+@font-face { font-family: "PP Eiko"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/PPEiko-Regular.ttf") format("truetype"); }
+
+/* Basis Grotesque Pro — primary sans (does display + body + UI) */
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 300; font-style: normal; font-display: swap; src: url("fonts/BasisGrotesquePro-Light.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 300; font-style: italic; font-display: swap; src: url("fonts/BasisGrotesquePro-LightItalic.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/BasisGrotesquePro.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 400; font-style: italic; font-display: swap; src: url("fonts/BasisGrotesquePro-Italic.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/BasisGrotesquePro-Medium.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 500; font-style: italic; font-display: swap; src: url("fonts/BasisGrotesquePro-MediumItalic.otf") format("opentype"); }
+@font-face { font-family: "Basis Grotesque Pro"; font-weight: 700; font-style: normal; font-display: swap; src: url("fonts/BasisGrotesquePro-Bold.otf") format("opentype"); }
+
+:root {
+  /* ─────────────────────────────────────────────────────
+     COLOR — two-mode (light / inverted), single accent
+     The whole brand is black-on-white plus one accent.
+     Warmth comes from photography, not extra hues.
+     ───────────────────────────────────────────────────── */
+
+  /* Core neutrals (light) */
+  --ink:          #0A0A0A;       /* near-black text + UI */
+  --paper:        #FAFAFA;       /* page background */
+  --ink-muted:    #6B6B6B;       /* meta, captions, dim labels */
+  --line:         #E5E5E5;       /* hairline borders */
+  --paper-2:      #F2F1ED;       /* warm-neutral panel fill (rare) */
+
+  /* Inverted neutrals */
+  --invert-ink:   #FAFAFA;
+  --invert-bg:    #0A0A0A;
+  --invert-muted: #9A9A9A;
+  --invert-line:  #1F1F1F;
+  --invert-panel: #141414;       /* terminal interior */
+
+  /* Accent — themeable. Default = Monokai sodium (terminal green) */
+  --accent:       #A6E22E;
+  --accent-ink:   #0A0A0A;       /* text colour when placed *on* --accent */
+  --accent-soft:  color-mix(in oklab, var(--accent), transparent 80%);
+
+  /* Semantic role aliases (use these in component CSS, not raw colours) */
+  --fg-1: var(--ink);
+  --fg-2: var(--ink-muted);
+  --bg-1: var(--paper);
+  --bg-2: var(--paper-2);
+  --border-1: var(--line);
+
+  /* Status / signal — derived from accent so they retheme automatically */
+  --signal-live: var(--accent);
+  --signal-dim:  var(--ink-muted);
+
+  /* ─────────────────────────────────────────────────────
+     TYPE — three families, fixed scale, no in-between sizes
+     ───────────────────────────────────────────────────── */
+  --font-sans:    "Basis Grotesque Pro", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans);                /* displays are Basis Medium */
+  --font-accent:  "PP Eiko", "Tiempos", ui-serif, Georgia, serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Display — only used at hero / chapter / CTA scale */
+  --fs-display-sm: 48px;   --lh-display-sm: 1.05;  --ls-display-sm: -0.02em;
+  --fs-display-md: 72px;   --lh-display-md: 1.02;  --ls-display-md: -0.025em;
+  --fs-display-lg: 96px;   --lh-display-lg: 1.00;  --ls-display-lg: -0.03em;
+  --fs-display-xl: 128px;  --lh-display-xl: 0.98;  --ls-display-xl: -0.035em;
+
+  /* Body — three steps. Nothing between 18 and 48. */
+  --fs-body-sm: 14px;      --lh-body-sm: 1.55;
+  --fs-body-md: 16px;      --lh-body-md: 1.60;
+  --fs-body-lg: 18px;      --lh-body-lg: 1.60;
+
+  /* Micro — uppercase mono, tracked */
+  --fs-micro-sm: 10px;     --lh-micro-sm: 1.4;     --ls-micro-sm: 0.14em;
+  --fs-micro-md: 12px;     --lh-micro-md: 1.4;     --ls-micro-md: 0.10em;
+
+  /* ─────────────────────────────────────────────────────
+     SPACING — two section paddings only.
+     Section rhythm is the system's most important spacing rule.
+     ───────────────────────────────────────────────────── */
+  --space-section:    160px;     /* default — heroes, intros, pull quotes */
+  --space-section-sm: 96px;      /* compact — chapter labels, grids */
+  --gutter:           24px;
+  --gutter-md:        32px;
+
+  --max-reading: 640px;          /* essay body width */
+  --max-medium:  880px;          /* quotes, CTAs */
+  --max-wide:    1200px;         /* most page content */
+  --max-bleed:   1680px;         /* hero / full-bleed grid */
+
+  /* ─────────────────────────────────────────────────────
+     MOTION — three durations, three easings. No improvisation.
+     ───────────────────────────────────────────────────── */
+  --dur-fast:   200ms;
+  --dur-base:   400ms;
+  --dur-slow:   800ms;
+  --dur-reveal: 1200ms;
+
+  --ease-standard:     cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo:     cubic-bezier(0.16, 1.00, 0.30, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0.00, 0.17, 1);
+
+  /* ─────────────────────────────────────────────────────
+     LAYOUT — nav, radii. Almost everything is square corners.
+     ───────────────────────────────────────────────────── */
+  --nav-height:     64px;
+  --radius-pill:    9999px;
+  --radius-panel:   12px;   /* terminal / panel surfaces */
+  --radius-card:    0;      /* project cards have NO radius */
+  --radius-input:   6px;
+}
+
+/* =========================================================
+   INVERTED SURFACE — opt in by adding class="cb-invert"
+   to a <section> or any container. Swaps the semantic
+   roles so everything inside Just Works.
+   ========================================================= */
+.cb-invert {
+  background: var(--invert-bg);
+  color: var(--invert-ink);
+  --fg-1: var(--invert-ink);
+  --fg-2: var(--invert-muted);
+  --bg-1: var(--invert-bg);
+  --bg-2: var(--invert-panel);
+  --border-1: var(--invert-line);
+}
+
+/* =========================================================
+   ACCENT THEMES — curated alternatives.
+   Add class="cb-theme-amber" (etc.) to :root or any container
+   to retheme the accent below it.
+   ========================================================= */
+.cb-theme-sodium { --accent: #A6E22E; --accent-ink: #0A0A0A; }
+.cb-theme-amber  { --accent: #E8B65A; --accent-ink: #0A0A0A; }
+.cb-theme-flame  { --accent: #FF6B35; --accent-ink: #FAFAFA; }
+.cb-theme-index  { --accent: #584DFF; --accent-ink: #FAFAFA; }
+
+/* =========================================================
+   GLOBAL DEFAULTS
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg-1);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-md);
+  line-height: var(--lh-body-md);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+a { color: inherit; text-decoration: none; transition: opacity var(--dur-fast) var(--ease-standard); }
+a:hover { opacity: 0.55; }
+
+img, svg, video { display: block; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   SEMANTIC TYPOGRAPHY UTILITIES
+   Use these classes instead of hand-rolling font-size +
+   line-height + letter-spacing every time.
+   ========================================================= */
+
+.cb-display-xl,
+.cb-display-lg,
+.cb-display-md,
+.cb-display-sm {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--fg-1);
+  text-wrap: balance;
+  margin: 0;
+}
+.cb-display-xl { font-size: var(--fs-display-xl); line-height: var(--lh-display-xl); letter-spacing: var(--ls-display-xl); }
+.cb-display-lg { font-size: var(--fs-display-lg); line-height: var(--lh-display-lg); letter-spacing: var(--ls-display-lg); }
+.cb-display-md { font-size: var(--fs-display-md); line-height: var(--lh-display-md); letter-spacing: var(--ls-display-md); }
+.cb-display-sm { font-size: var(--fs-display-sm); line-height: var(--lh-display-sm); letter-spacing: var(--ls-display-sm); }
+
+/* PP Eiko — for the one-word italic flourish or the chapter numeral.
+   Never use for body or UI. */
+.cb-eiko       { font-family: var(--font-accent); font-weight: 400; font-style: normal; }
+.cb-eiko-i     { font-family: var(--font-accent); font-weight: 400; font-style: italic; }
+.cb-eiko-light { font-family: var(--font-accent); font-weight: 300; font-style: normal; }
+
+/* Body */
+.cb-body-lg { font-size: var(--fs-body-lg); line-height: var(--lh-body-lg); }
+.cb-body-md { font-size: var(--fs-body-md); line-height: var(--lh-body-md); }
+.cb-body-sm { font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+
+/* Micro — UPPERCASE MONO, the only legitimate small-text style */
+.cb-micro,
+.cb-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro-sm);
+  line-height: var(--lh-micro-sm);
+  letter-spacing: var(--ls-micro-sm);
+  text-transform: uppercase;
+  color: var(--fg-2);
+  font-weight: 400;
+}
+.cb-micro-md {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro-md);
+  line-height: var(--lh-micro-md);
+  letter-spacing: var(--ls-micro-md);
+  text-transform: uppercase;
+  color: var(--fg-2);
+  font-weight: 400;
+}
+
+/* Inline mono — for `code`-like fragments inside body copy */
+.cb-mono { font-family: var(--font-mono); font-variant-ligatures: none; font-feature-settings: "ss01"; }
+
+/* Caption — sits under figures */
+.cb-caption {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+  color: var(--fg-2);
+  margin-top: 16px;
+}
+
+/* Pull-quote — PP Eiko italic, the one moment of typographic impact */
+.cb-quote {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--fs-display-sm);
+  line-height: 1.15;
+  letter-spacing: var(--ls-display-sm);
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+@media (min-width: 768px) {
+  .cb-quote { font-size: var(--fs-display-md); line-height: 1.1; }
+}
+
+/* =========================================================
+   LAYOUT UTILITIES
+   ========================================================= */
+.cb-container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@media (min-width: 768px) { .cb-container { padding-inline: var(--gutter-md); } }
+
+.cb-container--reading { max-width: var(--max-reading); }
+.cb-container--medium  { max-width: var(--max-medium); }
+.cb-container--wide    { max-width: var(--max-wide); }
+.cb-container--bleed   { max-width: var(--max-bleed); }
+
+/* Section padding — pick exactly one of these on every <section>. */
+.cb-section    { padding-block: var(--space-section); }
+.cb-section-sm { padding-block: var(--space-section-sm); }
+
+/* Hairline divider, used at the top of chapter labels & metadata blocks */
+.cb-hairline { border-top: 1px solid var(--border-1); }

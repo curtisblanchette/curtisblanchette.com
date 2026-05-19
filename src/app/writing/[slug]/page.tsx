@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { listMdx, readMdx, formatDate, type WritingFrontmatter } from "@/lib/content";
-import { AsciiRule } from "@/components/section";
+
+import {
+  listMdx,
+  readMdx,
+  formatDate,
+  type WritingFrontmatter,
+} from "@/lib/content";
+import { Section } from "@/components/section";
+import { HeroManifesto } from "@/components/hero/hero-manifesto";
 
 export async function generateStaticParams() {
   const entries = await listMdx("writing");
@@ -36,61 +43,48 @@ export default async function WritingPage({
   const fm = mdx.data as WritingFrontmatter;
 
   return (
-    <article className="px-6 md:px-10 py-12 md:py-16">
-      <div className="mx-auto max-w-3xl">
-        <div className="text-[10px] uppercase tracking-[0.22em] text-muted mb-6">
-          <Link href="/" className="hover:text-accent">
-            ~/INDEX
-          </Link>{" "}
-          /{" "}
-          <Link href="/#writing" className="hover:text-accent">
-            WRITING
-          </Link>{" "}
-          / <span className="text-fg">{slug.toUpperCase()}</span>
-        </div>
+    <article>
+      <HeroManifesto
+        num="02"
+        numLabel={formatDate(fm.date)}
+        statement={{ before: fm.title }}
+      />
 
-        <header className="border-y border-line py-8">
-          <div className="text-[10px] uppercase tracking-[0.22em] text-accent">
-            ESSAY · {formatDate(fm.date)}
-          </div>
-          <h1 className="mt-4 text-3xl md:text-5xl font-semibold tracking-tight leading-[0.95]">
-            {fm.title}
-          </h1>
-          <p className="mt-4 text-base md:text-lg text-muted max-w-2xl leading-relaxed">
-            {fm.description}
-          </p>
-          {fm.tags && fm.tags.length > 0 ? (
-            <ul className="mt-5 flex flex-wrap gap-1.5 text-[10px] uppercase tracking-[0.18em]">
-              {fm.tags.map((t) => (
-                <li key={t} className="border border-line px-1.5 py-0.5 text-muted">
-                  {t}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </header>
+      <Section variant="sm" hairline container="reading">
+        <p className="cb-body-lg" style={{ color: "var(--fg-2)", margin: 0 }}>
+          {fm.description}
+        </p>
+      </Section>
 
+      <Section variant="sm" container="reading">
         <div
-          className="mt-10 prose-brutalist"
+          className="cb-prose"
           dangerouslySetInnerHTML={{ __html: mdx.html }}
         />
 
-        <AsciiRule className="mt-12" />
-
-        <div className="mt-8 flex items-center justify-between text-[11px] uppercase tracking-[0.18em]">
-          <Link href="/#writing" className="hover:text-accent">
+        <div
+          style={{
+            marginTop: 64,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingTop: 24,
+            borderTop: "1px solid var(--border-1)",
+          }}
+        >
+          <Link href="/writing" className="cb-eyebrow">
             ← All writing
           </Link>
           <a
             href="https://medium.com/@curtis.blanchette"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-accent"
+            className="cb-eyebrow"
           >
             More on Medium →
           </a>
         </div>
-      </div>
+      </Section>
     </article>
   );
 }

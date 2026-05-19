@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>cb-site-kit · Hero · terminal split</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../components.css" />
+<style>
+  /* Preview shell — DO NOT copy. Only the markup below <main> is the component. */
+  body { background: var(--bg-1); }
+  .cb-preview { padding: 48px var(--gutter); }
+  .cb-preview > * + * { margin-top: 56px; }
+  .cb-preview-label {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-2); margin-bottom: 16px;
+  }
+</style>
+</head>
+<body class="">
+<main class="cb-preview">
+
+  <section class="cb-hero cb-hero--terminal">
+    <div class="cb-container cb-container--bleed">
+      <div class="cb-hero__split">
+        <div>
+          <p class="cb-eyebrow" style="margin:0 0 24px"><i class="cb-dot"></i>&nbsp; Available · April 2026</p>
+          <h1 class="cb-hero__name">Curtis<br/>Blanchette<span class="cb-blink" aria-hidden="true"></span></h1>
+          <p class="cb-hero__role">
+            Lead engineer working on platform &amp; developer tooling. Ten years building software people use every day — most recently rebuilding <a href="#" class="cb-link">Helix</a>'s auth layer.
+          </p>
+          <div style="margin-top:40px;display:flex;gap:12px;flex-wrap:wrap">
+            <a href="#" class="cb-btn cb-btn--primary">Get in touch <span class="cb-arrow">↗</span></a>
+            <a href="#" class="cb-btn cb-btn--ghost">View work <span class="cb-arrow">→</span></a>
+          </div>
+        </div>
+        <div class="cb-terminal" style="height:340px">
+          <div class="cb-terminal__bar">
+            <span class="cb-terminal__dot cb-terminal__dot--r"></span>
+            <span class="cb-terminal__dot cb-terminal__dot--y"></span>
+            <span class="cb-terminal__dot cb-terminal__dot--g"></span>
+            <span class="cb-terminal__title">curtis@blanchette ~ </span>
+          </div>
+          <div class="cb-terminal__body">
+            <div class="cb-terminal__line"><span class="cb-terminal__prompt">$</span><span>whoami</span></div>
+            <div class="cb-terminal__out">curtis blanchette — lead software engineer</div>
+            <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>cat /etc/focus</span></div>
+            <div class="cb-terminal__out">platform · developer tooling · DX</div>
+            <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>uptime</span></div>
+            <div class="cb-terminal__out">10 years shipping · 0 cynicism</div>
+            <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>echo $ROLES</span></div>
+            <div class="cb-terminal__out"><span class="cb-terminal__c-string">"staff"</span> <span class="cb-terminal__c-string">"principal"</span> <span class="cb-terminal__c-string">"founding"</span></div>
+            <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>_<span class="cb-blink" aria-hidden="true"></span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

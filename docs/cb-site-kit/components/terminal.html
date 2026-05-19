@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>cb-site-kit · Terminal panel · standalone</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../components.css" />
+<style>
+  /* Preview shell — DO NOT copy. Only the markup below <main> is the component. */
+  body { background: var(--bg-1); }
+  .cb-preview { padding: 48px var(--gutter); }
+  .cb-preview > * + * { margin-top: 56px; }
+  .cb-preview-label {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-2); margin-bottom: 16px;
+  }
+</style>
+</head>
+<body class="">
+<main class="cb-preview">
+
+  <section class="cb-section-sm">
+    <div class="cb-container cb-container--medium">
+      <div class="cb-terminal">
+        <div class="cb-terminal__bar">
+          <span class="cb-terminal__dot cb-terminal__dot--r"></span>
+          <span class="cb-terminal__dot cb-terminal__dot--y"></span>
+          <span class="cb-terminal__dot cb-terminal__dot--g"></span>
+          <span class="cb-terminal__title">curtis@blanchette ~ </span>
+        </div>
+        <div class="cb-terminal__body">
+          <div class="cb-terminal__line"><span class="cb-terminal__prompt">$</span><span>whoami</span></div>
+          <div class="cb-terminal__out">curtis blanchette — lead software engineer</div>
+          <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>cat /etc/principles</span></div>
+          <div class="cb-terminal__out"><span class="cb-terminal__c-dim">// boring is a feature</span></div>
+          <div class="cb-terminal__out"><span class="cb-terminal__c-dim">// the platform should be invisible</span></div>
+          <div class="cb-terminal__out"><span class="cb-terminal__c-dim">// you ship people, not code</span></div>
+          <div class="cb-terminal__line" style="margin-top:8px"><span class="cb-terminal__prompt">$</span><span>_<span class="cb-blink" aria-hidden="true"></span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

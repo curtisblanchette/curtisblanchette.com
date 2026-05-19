@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>cb-site-kit · Atoms · buttons, pills, typography</title>
+<link rel="stylesheet" href="../tokens.css" />
+<link rel="stylesheet" href="../components.css" />
+<style>
+  /* Preview shell — DO NOT copy. Only the markup below <main> is the component. */
+  body { background: var(--bg-1); }
+  .cb-preview { padding: 48px var(--gutter); }
+  .cb-preview > * + * { margin-top: 56px; }
+  .cb-preview-label {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-2); margin-bottom: 16px;
+  }
+</style>
+</head>
+<body class="">
+<main class="cb-preview">
+
+  <div>
+    <p class="cb-preview-label">Buttons</p>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <a href="#" class="cb-btn cb-btn--primary">Get in touch <span class="cb-arrow">↗</span></a>
+      <a href="#" class="cb-btn cb-btn--ghost">View the work <span class="cb-arrow">→</span></a>
+      <a href="#" class="cb-btn cb-btn--accent">Currently shipping</a>
+      <a href="#" class="cb-btn cb-btn--primary cb-btn--sm">Small</a>
+      <a href="#" class="cb-btn cb-btn--ghost cb-btn--sm">Small ghost</a>
+    </div>
+  </div>
+
+  <div>
+    <p class="cb-preview-label">Status pills</p>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <span class="cb-pill"><i class="cb-dot"></i> Open to staff &amp; principal roles</span>
+      <span class="cb-pill cb-pill--mono">v 2026.04 — last shipped 3d ago</span>
+      <span class="cb-pill"><i class="cb-dot"></i> Currently shipping <span class="cb-mono" style="opacity:.6">helix/auth</span></span>
+    </div>
+  </div>
+
+  <div>
+    <p class="cb-preview-label">Inline editorial link</p>
+    <p class="cb-body-lg" style="max-width:60ch;margin:0">
+      I lead engineering at <a href="#" class="cb-link">Helix</a>, where we're rebuilding the platform's auth layer from the ground up. Before that, ten years across <a href="#" class="cb-link">consumer</a> and <a href="#" class="cb-link">enterprise</a>.
+    </p>
+  </div>
+
+  <div>
+    <p class="cb-preview-label">Blink cursor &amp; inline mono</p>
+    <p class="cb-display-sm" style="margin:0">
+      Lead Software<br/>Engineer<span class="cb-blink" aria-hidden="true"></span>
+    </p>
+    <p class="cb-body-md" style="margin-top:24px;color:var(--fg-2)">
+      Tracks: <span class="cb-mono">platform</span> · <span class="cb-mono">developer tooling</span> · <span class="cb-mono">infra you don't notice</span>
+    </p>
+  </div>
+
+  <div>
+    <p class="cb-preview-label">Typography scale</p>
+    <p class="cb-display-lg" style="margin:0">Display LG</p>
+    <p class="cb-display-md" style="margin:24px 0 0">Display MD with <em class="cb-eiko-i">italic flourish</em></p>
+    <p class="cb-display-sm" style="margin:24px 0 0">Display SM</p>
+    <p class="cb-body-lg"  style="margin:24px 0 0;max-width:60ch">Body LG — long-form reading size. Pairs with the display scale.</p>
+    <p class="cb-body-md"  style="margin:8px 0 0;max-width:60ch">Body MD — default running text.</p>
+    <p class="cb-body-sm"  style="margin:8px 0 0;max-width:60ch;color:var(--fg-2)">Body SM — captions, fine print.</p>
+    <p class="cb-eyebrow"  style="margin:24px 0 0">Eyebrow — mono · uppercase · tracked</p>
+    <p class="cb-micro-md" style="margin:8px 0 0">Micro MD — section labels</p>
+  </div>
+
+</main>
+</body>
+</html>

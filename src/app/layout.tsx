@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Header } from "@/components/header";
+import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { DEFAULT_THEME, PRE_HYDRATION_SCRIPT } from "@/lib/themes";
+import { PRE_HYDRATION_SCRIPT } from "@/lib/themes";
+import { basis, eiko, plex } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#FAFAFA",
   width: "device-width",
   initialScale: 1,
 };
@@ -47,17 +48,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme={DEFAULT_THEME} suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${basis.variable} ${eiko.variable} ${plex.variable}`}
+    >
       <head>
-        {/* Pre-hydration: read the stored theme and set data-theme before
-            React mounts. Eliminates FOUC and hydration mismatch. */}
+        {/* Pre-hydration: migrate legacy theme ids, then apply the kit
+            theme className to <html> before React mounts. Eliminates
+            FOUC and hydration mismatch. */}
         <script
           dangerouslySetInnerHTML={{ __html: PRE_HYDRATION_SCRIPT }}
         />
       </head>
-      <body className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
+      <body>
+        <Nav />
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,311 +1,216 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap");
-@import "tailwindcss";
-
 /* ─────────────────────────────────────────────────────────────────────────────
-   BRUTALIST DESIGN TOKENS — themeable via [data-theme="..."]
-   100% monospaced. 1px borders, no radius, no shadows. One accent per theme.
-   ──────────────────────────────────────────────────────────────────────────── */
+   cb-site-kit — site stylesheet
+   ----------------------------------------------------------------------------
+   Order matters:
+     1. Tailwind base (kept for residual utility usage like flex / min-h).
+     2. The kit's design tokens.
+     3. The kit's component CSS.
+     4. Local overrides:
+          a. Re-bind --font-* CSS variables to the next/font CSS variables
+             declared in src/app/fonts.ts and applied to <html> in layout.tsx.
+          b. .cb-prose — long-form MDX prose style (not shipped by the kit).
+          c. Global focus-visible outline using the active accent.
+   ───────────────────────────────────────────────────────────────────────────── */
 
-@theme {
-  /* These are the DEFAULT tokens. They match data-theme="brutalist" below.
-     Per-theme blocks override the same custom properties; Tailwind utilities
-     (bg-bg, text-fg, border-line, text-accent, …) resolve through the var. */
-  --color-bg: #0a0a0a;
-  --color-fg: #fafafa;
-  --color-heading: #fafafa;
-  --color-muted: #737373;
-  --color-faint: #404040;
-  --color-line: #262626;
-  --color-accent: #30d158;
-  --color-accent-dim: #21a040;
-  --color-code-bg: #1a1a1a;
-  --color-code-block-bg: #050505;
+@import "tailwindcss";
+@import "../styles/cb-site-kit/tokens.css";
+@import "../styles/cb-site-kit/components.css";
 
-  --font-mono:
-    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
-
-  --radius-none: 0;
-  --breakpoint-3xl: 110rem;
+/* ─── Bind kit font variables to next/font outputs ─────────────────────────── */
+:root {
+  --font-sans:    var(--cb-font-sans),   "Inter",  ui-sans-serif, system-ui, sans-serif;
+  --font-accent:  var(--cb-font-accent), "Tiempos", ui-serif, Georgia, serif;
+  --font-mono:    var(--cb-font-mono),   ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* ─── Theme: BRUTALIST (default · dark · system green) ────────────────────── */
-[data-theme="brutalist"] {
-  --color-bg: #0a0a0a;
-  --color-fg: #fafafa;
-  --color-heading: #fafafa;
-  --color-muted: #737373;
-  --color-faint: #404040;
-  --color-line: #262626;
-  --color-accent: #30d158;
-  --color-accent-dim: #21a040;
-  --color-code-bg: #1a1a1a;
-  --color-code-block-bg: #050505;
+/* ─── cb-prose — long-form MDX bodies on /work/[slug] and /writing/[slug] ── */
+.cb-prose {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--fg-1);
+  max-width: var(--max-reading);
 }
-
-/* ─── Theme: PAPER (light · cream · burnt orange) ─────────────────────────── */
-[data-theme="paper"] {
-  --color-bg: #f4f0e8;
-  --color-fg: #1a1a1a;
-  --color-heading: #fafafa;
-  --color-muted: #6b6b6b;
-  --color-faint: #b8b3a8;
-  --color-line: #d4cfc4;
-  --color-accent: #c2410c;
-  --color-accent-dim: #7c2d12;
-  --color-code-bg: #e8e2d3;
-  --color-code-block-bg: #ebe5d6;
+.cb-prose > * + * { margin-top: 1.5em; }
+.cb-prose p { margin: 1.5em 0; }
+.cb-prose h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 2.5em 0 0.75em;
+  color: var(--fg-1);
 }
-
-/* ─── Theme: TERMINAL (jet black · phosphor green) ────────────────────────── */
-[data-theme="terminal"] {
-  --color-bg: #000000;
-  --color-fg: #00ff66;
-  --color-heading: #fafafa;
-  --color-muted: #00a043;
-  --color-faint: #007030;
-  --color-line: #003318;
-  --color-accent: #00ff66;
-  --color-accent-dim: #00a043;
-  --color-code-bg: #001a0c;
-  --color-code-block-bg: #000a04;
+.cb-prose h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.25;
+  margin: 2em 0 0.5em;
+  color: var(--fg-1);
 }
-
-/* ─── Theme: VAPOR (deep navy · hot magenta) ──────────────────────────────── */
-[data-theme="vapor"] {
-  --color-bg: #0d0221;
-  --color-fg: #fefefe;
-  --color-heading: #fefefe;
-  --color-muted: #8b7eff;
-  --color-faint: #4b3a8c;
-  --color-line: #2d1b4e;
-  --color-accent: #ff2bd6;
-  --color-accent-dim: #b81e9d;
-  --color-code-bg: #1a0a35;
-  --color-code-block-bg: #07011a;
-}
-
-/* ─── Theme: TERMINAL scanline overlay (opt-in for the CRT feel) ──────────── */
-[data-theme="terminal"] body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 2px,
-    rgba(0, 255, 102, 0.025) 2px,
-    rgba(0, 255, 102, 0.025) 3px
-  );
-  mix-blend-mode: screen;
-}
-
-/* ─── Base ────────────────────────────────────────────────────────────────── */
-
-* {
-  border-color: var(--color-line);
-}
-
-html,
-body {
-  background: var(--color-bg);
-  color: var(--color-fg);
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-feature-settings: "ss01", "ss02", "zero", "calt";
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  transition:
-    background-color 200ms ease,
-    color 200ms ease;
-}
-
-::selection {
-  background: var(--color-accent);
-  color: var(--color-bg);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--color-heading);
-}
-
-a {
+.cb-prose a {
   color: inherit;
-  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  padding-bottom: 2px;
+  transition: opacity var(--dur-fast) var(--ease-standard);
 }
-
-/* ─── Utility primitives ───────────────────────────────────────────────────── */
-
-.text-accent { color: var(--color-accent); }
-.text-muted { color: var(--color-muted); }
-.text-faint { color: var(--color-faint); }
-.bg-accent { background: var(--color-accent); }
-.border-line { border-color: var(--color-line); }
-
-/* Inverted hover — sharp swap, fast transition */
-.invert-on-hover {
-  transition: background-color 80ms linear, color 80ms linear;
-}
-.invert-on-hover:hover {
-  background: var(--color-fg);
-  color: var(--color-bg);
-}
-
-/* Accent-underline link */
-.link-accent {
-  position: relative;
-  display: inline-block;
-}
-.link-accent::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.4;
-}
-.link-accent:hover {
-  color: var(--color-accent);
-}
-.link-accent:hover::after {
-  background: var(--color-accent);
-  opacity: 1;
-}
-
-/* Blinking caret */
-.caret::after {
-  content: "█";
-  display: inline-block;
-  margin-left: 0.15em;
-  color: var(--color-accent);
-  animation: blink 1.1s steps(2, start) infinite;
-}
-@keyframes blink {
-  to {
-    visibility: hidden;
-  }
-}
-
-/* Marquee */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation: marquee 60s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
-  .caret::after { animation: none; }
-}
-
-/* Dotted column rules */
-.col-rule {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--color-line) 0,
-    var(--color-line) 4px,
-    transparent 4px,
-    transparent 8px
-  );
-  width: 1px;
-}
-
-/* Code */
-pre {
-  background: var(--color-code-block-bg) !important;
-  border: 1px solid var(--color-line);
-  padding: 1rem;
-  overflow-x: auto;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-}
-pre code {
-  background: transparent !important;
-  padding: 0 !important;
-  font-family: var(--font-mono) !important;
-}
-code:not(pre code) {
-  background: var(--color-code-bg);
-  border: 1px solid var(--color-line);
-  padding: 1px 5px;
-  font-size: 0.875em;
-}
-
-/* Prose */
-.prose-brutalist {
-  color: var(--color-fg);
-  font-size: 0.9375rem;
-  line-height: 1.75;
-  max-width: 68ch;
-}
-.prose-brutalist p { margin: 1em 0; }
-.prose-brutalist h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 3em;
-  margin-bottom: 0.75em;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border-top: 1px solid var(--color-line);
-  padding-top: 1.5em;
-}
-.prose-brutalist h2::before {
-  content: "## ";
-  color: var(--color-accent);
-}
-.prose-brutalist h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-}
-.prose-brutalist h3::before {
-  content: "### ";
-  color: var(--color-accent);
-}
-.prose-brutalist a {
-  color: var(--color-accent);
-  border-bottom: 1px solid var(--color-accent-dim);
-}
-.prose-brutalist a:hover {
-  background: var(--color-accent);
-  color: var(--color-bg);
-}
-.prose-brutalist blockquote {
-  border-left: 2px solid var(--color-accent);
-  padding-left: 1.25em;
-  margin: 1.5em 0;
-  color: var(--color-muted);
-  font-style: normal;
-}
-.prose-brutalist ul,
-.prose-brutalist ol {
-  margin: 1em 0;
-  padding-left: 1.5em;
-}
-.prose-brutalist ul li::marker {
-  content: "▸ ";
-  color: var(--color-accent);
-}
-.prose-brutalist hr {
+.cb-prose a:hover { opacity: 0.55; }
+.cb-prose blockquote {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.25;
+  color: var(--fg-1);
   border: 0;
-  border-top: 1px dashed var(--color-line);
-  margin: 2.5em 0;
+  padding: 0;
+  margin: 2em 0;
+  max-width: 30ch;
 }
-.prose-brutalist img {
-  border: 1px solid var(--color-line);
-  margin: 1.5em 0;
+.cb-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-2);
+  border: 1px solid var(--border-1);
+  padding: 1px 6px;
+  border-radius: 4px;
 }
+.cb-prose pre {
+  font-family: var(--font-mono);
+  background: var(--invert-bg);
+  color: var(--invert-ink);
+  border: 1px solid var(--invert-line);
+  border-radius: var(--radius-panel);
+  padding: 20px 22px;
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.65;
+  margin: 2em 0;
+}
+.cb-prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.cb-prose ul,
+.cb-prose ol {
+  padding-left: 1.25em;
+  margin: 1.25em 0;
+}
+.cb-prose li { margin: 0.5em 0; }
+.cb-prose hr {
+  border: 0;
+  border-top: 1px solid var(--border-1);
+  margin: 3em 0;
+}
+.cb-prose img {
+  display: block;
+  margin: 2em 0;
+  border: 1px solid var(--border-1);
+  max-width: 100%;
+  height: auto;
+}
+.cb-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: var(--fs-body-sm);
+}
+.cb-prose th,
+.cb-prose td {
+  border-bottom: 1px solid var(--border-1);
+  padding: 0.6em 0.8em;
+  text-align: left;
+}
+.cb-prose th {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: var(--fs-micro-md);
+  letter-spacing: var(--ls-micro-md);
+  color: var(--fg-2);
+  font-weight: 400;
+}
+
+/* ─── Global focus-visible outline ─────────────────────────────────────────── */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ─── Body layout helper ───────────────────────────────────────────────────── */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body > main { flex: 1; }
+
+/* ─── Theme switcher chrome (integration component, not in the kit) ───────── */
+.cb-theme-switcher {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.cb-theme-switcher__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro-md);
+  letter-spacing: var(--ls-micro-md);
+  text-transform: uppercase;
+}
+.cb-theme-switcher__caret {
+  font-family: var(--font-mono);
+  opacity: 0.6;
+  margin-left: 2px;
+}
+.cb-theme-switcher__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  min-width: 220px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--bg-1);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-panel);
+}
+.cb-invert .cb-theme-switcher__menu {
+  background: var(--invert-panel);
+}
+.cb-theme-switcher__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro-md);
+  letter-spacing: var(--ls-micro-md);
+  text-transform: uppercase;
+  color: var(--fg-1);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.cb-theme-switcher__row:hover { background: var(--bg-2); }
+.cb-invert .cb-theme-switcher__row:hover { background: var(--invert-line); }
+.cb-theme-switcher__row[data-selected] { color: var(--accent); }
+.cb-theme-switcher__swatches { display: inline-flex; gap: 2px; flex: 0 0 auto; }
+.cb-theme-switcher__swatch {
+  display: block;
+  width: 8px;
+  height: 14px;
+  border: 1px solid var(--border-1);
+}
+.cb-theme-switcher__name { flex: 1; text-align: left; }
+.cb-theme-switcher__check { color: var(--accent); }

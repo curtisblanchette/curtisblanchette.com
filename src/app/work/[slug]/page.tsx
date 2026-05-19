@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { WORK, getWork, type WorkItem } from "@/content/data/work";
 import { readMdx } from "@/lib/content";
-import { Crosshair } from "@/components/crosshair";
-import { AsciiRule, FieldRow } from "@/components/section";
+import { Section } from "@/components/section";
+import { HeroManifesto } from "@/components/hero/hero-manifesto";
 
 export async function generateStaticParams() {
   return WORK.map((w) => ({ slug: w.slug }));
@@ -24,20 +25,9 @@ export async function generateMetadata({
     openGraph: {
       title: item.title,
       description: item.summary,
-      images: item.cover ? [item.cover] : undefined,
+      images: item.coverImage ? [item.coverImage] : undefined,
     },
   };
-}
-
-function badgeFor(v: WorkItem["visibility"]) {
-  switch (v) {
-    case "public":
-      return { label: "PUBLIC", className: "text-accent border-accent" };
-    case "client-anon":
-      return { label: "NDA · CLIENT ANON", className: "text-muted border-line" };
-    case "internal":
-      return { label: "INTERNAL", className: "text-muted border-line" };
-  }
 }
 
 export default async function WorkPage({
@@ -49,76 +39,81 @@ export default async function WorkPage({
   const item = getWork(slug);
   if (!item) notFound();
   const mdx = await readMdx("work", slug);
-  const badge = badgeFor(item.visibility);
 
   return (
-    <article className="px-6 md:px-10 py-12 md:py-16">
-      <div className="mx-auto max-w-4xl">
-        {/* breadcrumb */}
-        <div className="text-[10px] uppercase tracking-[0.22em] text-muted mb-6">
-          <Link href="/" className="hover:text-accent">
-            ~/INDEX
-          </Link>{" "}
-          /{" "}
-          <Link href="/#work" className="hover:text-accent">
-            WORK
-          </Link>{" "}
-          / <span className="text-fg">{item.slug.toUpperCase()}</span>
+    <article>
+      <HeroManifesto
+        num="01"
+        numLabel={`${item.year} · ${item.client}`}
+        statement={{
+          before: item.italic
+            ? splitTitleBeforeItalic(item.title, item.italic)
+            : item.title,
+          italic: item.italic
+            ? matchTitleItalic(item.title, item.italic)
+            : undefined,
+          after: item.italic
+            ? splitTitleAfterItalic(item.title, item.italic)
+            : "",
+        }}
+      />
+
+      {item.heroVideo ? (
+        <Section variant="sm" container="bleed">
+          <video
+            src={item.heroVideo}
+            poster={item.coverImage}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden
+            style={{
+              display: "block",
+              width: "100%",
+              height: "auto",
+              border: "1px solid var(--border-1)",
+              borderRadius: "var(--radius-card)",
+              background: "var(--bg-2)",
+            }}
+          />
+        </Section>
+      ) : null}
+
+      <Section variant="sm" hairline container="reading">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: 20,
+          }}
+        >
+          <MetaRow label="Role" value={item.role} />
+          <MetaRow label="Tags" value={item.tags.join(" · ")} />
+          {item.links && item.links.length > 0 ? (
+            <MetaRow
+              label="Links"
+              value={item.links.map((l, i) => (
+                <span key={l.href}>
+                  <a
+                    href={l.href}
+                    className="cb-link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {l.label}
+                  </a>
+                  {i < item.links!.length - 1 ? "  ·  " : ""}
+                </span>
+              ))}
+            />
+          ) : null}
         </div>
+      </Section>
 
-        <header className="border border-line p-6 md:p-8 bg-[#0a0a0a] relative">
-          <Crosshair />
-          <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.22em]">
-            <span className={`border px-2 py-1 ${badge.className}`}>
-              {badge.label}
-            </span>
-            <span className="text-muted">CASE STUDY · {item.year}</span>
-          </div>
-          <h1 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight leading-[0.95]">
-            {item.title}
-          </h1>
-          <p className="mt-4 text-base text-muted max-w-3xl leading-relaxed">
-            {item.summary}
-          </p>
-
-          <div className="mt-7 grid grid-cols-1 md:grid-cols-2 gap-x-8">
-            <div>
-              <FieldRow label="Client" value={item.client} />
-              <FieldRow label="Role" value={item.role} />
-              <FieldRow label="Year" value={item.year} />
-            </div>
-            <div>
-              <FieldRow
-                label="Tags"
-                value={item.tags.join(" · ")}
-              />
-              {item.links && item.links.length > 0 ? (
-                <FieldRow
-                  label="Links"
-                  value={
-                    <span className="flex flex-wrap gap-x-3 justify-end">
-                      {item.links.map((l) => (
-                        <a
-                          key={l.href}
-                          href={l.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="link-accent text-accent"
-                        >
-                          {l.label}
-                        </a>
-                      ))}
-                    </span>
-                  }
-                />
-              ) : null}
-            </div>
-          </div>
-        </header>
-
-        <AsciiRule className="mt-10" />
-
-        <div className="mt-10 prose-brutalist">
+      <Section variant="sm" container="reading">
+        <div className="cb-prose">
           {mdx ? (
             <div dangerouslySetInnerHTML={{ __html: mdx.html }} />
           ) : (
@@ -126,44 +121,81 @@ export default async function WorkPage({
           )}
         </div>
 
-        <AsciiRule className="mt-12" />
-
-        <div className="mt-8 flex items-center justify-between text-[11px] uppercase tracking-[0.18em]">
-          <Link href="/#work" className="hover:text-accent">
+        <div
+          style={{
+            marginTop: 64,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingTop: 24,
+            borderTop: "1px solid var(--border-1)",
+          }}
+        >
+          <Link href="/work" className="cb-eyebrow">
             ← All work
           </Link>
-          <a
-            href="mailto:hello@curtisblanchette.com"
-            className="hover:text-accent"
-          >
+          <a href="mailto:hello@curtisblanchette.com" className="cb-eyebrow">
             Talk about this →
           </a>
         </div>
-      </div>
+      </Section>
     </article>
+  );
+}
+
+function MetaRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "120px 1fr",
+        gap: 24,
+        alignItems: "baseline",
+      }}
+    >
+      <span className="cb-eyebrow">{label}</span>
+      <span className="cb-body-md" style={{ color: "var(--fg-1)" }}>
+        {value}
+      </span>
+    </div>
   );
 }
 
 function NoContentPlaceholder({ item }: { item: WorkItem }) {
   return (
-    <div className="border border-dashed border-line p-6 text-sm text-muted leading-relaxed">
-      <p className="text-fg">[ case study in progress ]</p>
-      <p className="mt-2">
-        A full write-up for <span className="text-fg">{item.title}</span> is
-        being drafted. In the meantime, the summary above captures the scope
-        and the spec sheet captures the contract.
-      </p>
-      <p className="mt-2">
-        For specifics — architecture diagrams, decisions, what worked and what
-        didn&apos;t —{" "}
-        <a
-          href="mailto:hello@curtisblanchette.com"
-          className="link-accent text-accent"
-        >
-          drop me a line
-        </a>
-        .
-      </p>
-    </div>
+    <p>
+      A full write-up for {item.title} is in progress. For architecture
+      diagrams, decisions, and what worked vs. didn&apos;t —{" "}
+      <a href="mailto:hello@curtisblanchette.com">drop me a line</a>.
+    </p>
   );
+}
+
+/* ── Title-italic helpers (mirror the project-list logic) ─────────────────── */
+function findItalicSpan(title: string, italic: string) {
+  const idx = title.toLowerCase().indexOf(italic.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: title.slice(0, idx),
+    match: title.slice(idx, idx + italic.length),
+    after: title.slice(idx + italic.length),
+  };
+}
+function splitTitleBeforeItalic(title: string, italic: string): string {
+  const s = findItalicSpan(title, italic);
+  return s ? s.before : `${title} `;
+}
+function matchTitleItalic(title: string, italic: string): string {
+  const s = findItalicSpan(title, italic);
+  return s ? s.match : italic;
+}
+function splitTitleAfterItalic(title: string, italic: string): string {
+  const s = findItalicSpan(title, italic);
+  return s ? s.after : "";
 }

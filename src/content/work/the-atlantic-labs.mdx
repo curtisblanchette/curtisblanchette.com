@@ -1,64 +1,86 @@
 ---
-title: The Atlantic Labs
+title: Atlantic Companion — The Atlantic Labs
 client: The Atlantic × Metalab
 role: Engineering Lead
 year: "2024–2025"
-summary: A multi-year AI sandbox engagement running a portfolio of editorial-AI experiments under one umbrella.
-tags: ["AI Sandbox", "Turborepo", "AWS", "RAG", "Editorial AI", "CI/CD"]
+summary: An auth-gated AI assistant that finds Atlantic articles spanning 100+ years of publication. Shipped from the Zeitgeist experiment inside The Atlantic Labs.
+tags: ["RAG", "Conversational AI", "Atlantic Archive", "Turborepo", "AWS", "Editorial AI"]
 cover: /images/atlantic/home.png
 visibility: public
 ---
 
-## The engagement
+## Atlantic Companion
 
-The Atlantic Labs is not a single product. It's an ongoing AI sandbox: an editorial-AI innovation engagement between The Atlantic and Metalab where multiple experiments run in parallel, share infrastructure, and ship to readers only when they earn it.
+Atlantic Companion is an AI assistant built for The Atlantic. It finds articles from the magazine's archive — going back over a hundred years of continuous publication — in response to whatever a reader is curious about right now.
 
-The brief is bigger than any individual deliverable. **Can a 168-year-old publisher use AI-native surfaces to make its archive more useful — without compromising voice, editorial standards, or reader trust?** That question is the engagement. Specific experiments are the way we answer it in public.
+You ask it about anything: a current event, a half-remembered phrase, a person, a question your kid asked you. It returns Atlantic pieces from across the archive that bear on it — sometimes from this month, sometimes from 1932. The retrieval is RAG-backed; the ranking is editorial-curated; the conversational surface is built around the assumption that the reader doesn't already know what they want to read.
 
-## The pattern
+It lives at [labs.theatlantic.com](https://labs.theatlantic.com), behind Atlantic SSO — a logged-in reader product, not an open marketing surface.
 
-What makes the Labs engagement work — and what I owned as engineering lead — is the operating pattern underneath every experiment:
+Internally, the app shipped from `experiments/zeitgeist` and was codenamed **Abby** through development. *Atlantic Companion* is the public-facing name.
 
-- **Experiment-as-package.** A Turborepo monorepo, with each experiment scoped as its own app inside `experiments/`. New experiments inherit the toolchain (TypeScript, build, test, deploy) without setup tax. Spinning up the next hypothesis costs hours, not weeks.
-- **One CI/CD pipeline, many surfaces.** A single deployment harness handles browser extensions, marketing microsites, internal admin tools, and backend services. The same pipeline that ships a wrapper experiment ships an editorial dashboard.
-- **Shared retrieval, swappable ranking.** Every experiment talks to the same recommendation backend. Ranking models are swapped behind a `model` parameter, so editorial can A/B which lens works best for a given experience — *Balanced*, *Timely*, *Long-form*, or anything we add next — without redeploying the experiment.
-- **Editorial as a first-class user.** Editorial controls are not a backend tuning knob. They're a product surface, named in plain English, used by The Atlantic's own team to steer what gets surfaced.
-- **Privacy by default.** No background page classification. No silent profile-building. The system only acts on context a reader has explicitly given it.
+## The engagement context
 
-## Experiments shipped under the umbrella
+The Atlantic Labs is the wider engagement Atlantic Companion was built inside: a long-horizon partnership between The Atlantic and Metalab to give the publisher a responsible, durable way to explore AI surfaces on top of its own work. Metalab leads it as a full build — product strategy, design, and engineering — and Atlantic Companion is the first reader-facing product to ship under that umbrella.
 
-- **The Atlantic Take** — a browser extension that surfaces archival Atlantic stories matched to whatever you're reading on the open web. Three retrieval models, an editorial control surface, a swipeable card UI, and a marketing microsite.
-- **Wrapper experiments** — a family of reader-facing surfaces (codenamed *Abby*, *Home*, *Odyssey*) that explored different placements and form factors for AI-driven discovery against the same retrieval backend.
+The brief is wider than any one deliverable: **how does a 168-year-old publisher use AI-native surfaces to make its archive more useful — without compromising voice, editorial standards, or reader trust?** Atlantic Companion is the most-developed answer so far. Other experiments in the Labs explore adjacent surfaces and form factors.
 
-Each experiment was scoped to validate a specific hypothesis, ship in weeks, and either graduate, iterate, or sunset on the evidence.
+## The retrieval problem
+
+The Atlantic has been publishing continuously since 1857. The archive is the moat — and historically, it has been almost entirely invisible to readers in the moment. Atlantic Companion's job is to make that archive feel like a single, browsable corpus regardless of when a piece was written.
+
+That introduces problems that don't show up in shorter-horizon corpora:
+
+- **Vocabulary drift.** The language a 1948 piece uses about a topic is not the language a 2024 piece uses for the same topic. Naive embeddings underweight historically important matches because the surface vocabulary has moved on.
+- **Density.** The archive is uneven — eras with heavy coverage of a topic can dominate retrieval to the point that nothing else surfaces. "Relevance" has to be balanced against "what would a curious reader actually want to see across a century".
+- **Voice.** The reader is talking to The Atlantic, not to a generic assistant. Atlantic Companion has to feel like an editor at the magazine, not like a chatbot wrapped in a logo.
+
+The retrieval layer handles drift and density. The editorial-curated ranking and the conversational surface handle voice.
+
+## The pattern underneath
+
+What makes the Labs engagement scale beyond a single product — and what I owned as engineering lead — is the operating pattern underneath every experiment:
+
+- **Experiment-as-package.** A Turborepo monorepo, with each experiment scoped as its own app inside `experiments/`. Atlantic Companion ships from `experiments/zeitgeist`. New experiments inherit the toolchain (TypeScript, build, test, deploy) without setup tax — spinning up the next hypothesis costs hours, not weeks.
+- **One CI/CD pipeline, many surfaces.** A single deployment harness handles reader-facing apps, internal admin tools, and backend services. The same pipeline that ships Atlantic Companion ships the editorial dashboard behind it.
+- **Shared retrieval, swappable ranking.** Every experiment talks to the same recommendation backend. Ranking models are swapped behind a `model` parameter so editorial can A/B which lens works best — *Balanced*, *Timely*, *Long-form*, or anything we add next — without redeploying the app.
+- **Editorial as a first-class user.** Editorial controls are not a backend tuning knob. They're a product surface, named in plain English, used by The Atlantic's own team to steer what the assistant surfaces.
+- **Privacy by default.** Atlantic Companion acts only on what the reader gives it in the conversation. No background classification, no silent profile-building.
 
 ## Architecture sketch
 
 ```
-   ┌───────────────────── EDITORIAL ──────────────────────┐
-   │  ranking-model selector · curation surface · audit   │
+   ┌─── ATLANTIC SSO ─────────────────────────────────────┐
+   │  labs.theatlantic.com · authenticated readers only   │
+   └────────────────────────┬─────────────────────────────┘
+                            │
+   ┌────────────────────────▼─────────────────────────────┐
+   │  ATLANTIC COMPANION (experiments/zeitgeist)          │
+   │  conversational surface · context-aware retrieval    │
    └────────────────────────┬─────────────────────────────┘
                             │
    ┌────────────────────────▼─────────────────────────────┐
    │  Shared retrieval / ranking service                  │
-   │  Atlantic archive index · Balanced / Timely / Long…  │
-   └─────┬──────────────┬──────────────┬──────────────────┘
-         │              │              │
-    ┌────▼───┐     ┌────▼────┐    ┌────▼────────────┐
-    │ TAKE   │     │ WRAPPER │    │ WRAPPER         │
-    │ (ext.) │     │ (Abby)  │    │ (Home/Odyssey)  │
-    └────────┘     └─────────┘    └─────────────────┘
+   │  Atlantic archive index (1857 →) · Balanced /        │
+   │  Timely / Long-form / …                              │
+   └────────────────────────┬─────────────────────────────┘
+                            │
+   ┌────────────────────────▼─────────────────────────────┐
+   │  EDITORIAL                                           │
+   │  ranking-model selector · curation surface · audit   │
+   └──────────────────────────────────────────────────────┘
 ```
 
-A Terraform-managed AWS footprint underneath. A Turborepo monorepo on top. Everything in between is the experiment harness.
+A Terraform-managed AWS footprint underneath. A Turborepo monorepo on top. Atlantic Companion sits on the shared retrieval/ranking service alongside every other experiment in the Labs.
 
 ## What I owned
 
 - Technical lead across the engagement — not any single experiment.
 - The experiment harness: monorepo layout, shared infrastructure, the CI/CD pipeline that lets a new experiment go from `git init` to deployed in days.
-- The contract between editorial, the retrieval/ranking service, and every reader-facing surface.
+- The contract between editorial, the retrieval/ranking service, and Atlantic Companion's conversational surface.
 - AWS infrastructure via Terraform; the deployment story The Atlantic could operate without us.
-- The editorial-surface design — translating "what makes a good match for *this* audience" between domain experts and the ranking team into a named, controllable product surface.
+- The editorial-surface design — translating "what makes a good match for *this* reader" between domain experts and the ranking team into a named, controllable product surface.
+- Atlantic-SSO integration; making the assistant a logged-in reader product on day one.
 
 ## What carried forward
 
