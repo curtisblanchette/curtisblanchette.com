@@ -9,7 +9,8 @@ All colors are theme-scoped CSS variables. The defaults live in Tailwind v4's `@
 | Token | Default (`brutalist`) | Use |
 |---|---|---|
 | `--color-bg` | `#0a0a0a` | Page background |
-| `--color-fg` | `#fafafa` | Primary text |
+| `--color-fg` | `#fafafa` | Primary body text |
+| `--color-heading` | `#fafafa` | Heading text (h1–h6). Forced white across **all** themes, independent of `--color-fg`. |
 | `--color-muted` | `#737373` | Secondary text, dates, labels |
 | `--color-faint` | `#404040` | Disabled / decorative |
 | `--color-line` | `#262626` | All 1px borders and rules |
@@ -23,12 +24,14 @@ All colors are theme-scoped CSS variables. The defaults live in Tailwind v4's `@
 
 Four themes ship. The active theme is stored in `localStorage` under `cb.theme` and applied to `<html data-theme="...">` by an inline pre-hydration script (see [`architecture.md`](./architecture.md#theming)). The switcher UI lives in the header status bar.
 
-| Theme | bg | fg | accent | Vibe |
-|---|---|---|---|---|
-| `brutalist` (default) | `#0a0a0a` | `#fafafa` | `#30d158` | Near-black, system green. The home palette. |
-| `paper` | `#f4f0e8` | `#1a1a1a` | `#c2410c` | Cream and ink, burnt-orange accent. Light brutalist. |
-| `terminal` | `#000000` | `#00ff66` | `#00ff66` | CRT phosphor. Scanline overlay applied automatically. |
-| `vapor` | `#0d0221` | `#fefefe` | `#ff2bd6` | Synthwave. Deep navy + hot magenta. |
+| Theme | bg | body fg | heading | accent | Vibe |
+|---|---|---|---|---|---|
+| `brutalist` (default) | `#0a0a0a` | `#fafafa` | `#fafafa` | `#30d158` | Near-black, system green. The home palette. |
+| `paper` | `#f4f0e8` | `#1a1a1a` | `#fafafa` | `#c2410c` | Cream body with ink prose, white headings sit on the cream cards. Burnt-orange accent. |
+| `terminal` | `#000000` | `#00ff66` | `#fafafa` | `#00ff66` | CRT phosphor body, white headings cut through. Scanline overlay applied automatically. |
+| `vapor` | `#0d0221` | `#fefefe` | `#fefefe` | `#ff2bd6` | Synthwave. Deep navy + hot magenta. |
+
+**Note on headings.** Headings (h1–h6) use `--color-heading`, **not** `--color-fg`. The brutalist white heading is intentionally carried across every theme — it's a load-bearing visual constant. Body text and accent vary per theme; headings stay white.
 
 Add a new theme:
 1. Register it in `src/lib/themes.ts` (`THEMES` array, with `id`, `label`, `description`, three `swatches`).

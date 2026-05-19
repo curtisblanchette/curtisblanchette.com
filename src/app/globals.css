@@ -12,6 +12,7 @@
      (bg-bg, text-fg, border-line, text-accent, …) resolve through the var. */
   --color-bg: #0a0a0a;
   --color-fg: #fafafa;
+  --color-heading: #fafafa;
   --color-muted: #737373;
   --color-faint: #404040;
   --color-line: #262626;
@@ -32,6 +33,7 @@
 [data-theme="brutalist"] {
   --color-bg: #0a0a0a;
   --color-fg: #fafafa;
+  --color-heading: #fafafa;
   --color-muted: #737373;
   --color-faint: #404040;
   --color-line: #262626;
@@ -45,6 +47,7 @@
 [data-theme="paper"] {
   --color-bg: #f4f0e8;
   --color-fg: #1a1a1a;
+  --color-heading: #fafafa;
   --color-muted: #6b6b6b;
   --color-faint: #b8b3a8;
   --color-line: #d4cfc4;
@@ -58,6 +61,7 @@
 [data-theme="terminal"] {
   --color-bg: #000000;
   --color-fg: #00ff66;
+  --color-heading: #fafafa;
   --color-muted: #00a043;
   --color-faint: #007030;
   --color-line: #003318;
@@ -71,6 +75,7 @@
 [data-theme="vapor"] {
   --color-bg: #0d0221;
   --color-fg: #fefefe;
+  --color-heading: #fefefe;
   --color-muted: #8b7eff;
   --color-faint: #4b3a8c;
   --color-line: #2d1b4e;
@@ -125,9 +130,12 @@ body {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
   line-height: 1;
   letter-spacing: -0.02em;
+  color: var(--color-heading);
 }
 
 a {
