@@ -2,6 +2,10 @@ import type { MetadataRoute } from "next";
 import { WORK } from "@/content/data/work";
 import { listMdx } from "@/lib/content";
 
+// Required for `output: "export"`: the sitemap route must be statically
+// generated at build time rather than served dynamically.
+export const dynamic = "force-static";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://curtisblanchette.com";
   const now = new Date();

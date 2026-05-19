@@ -4,48 +4,56 @@ on:
   push:
     branches: [ main ]
 
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+# Cancel superseded runs on the same branch.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privilege token (this workflow only needs to read the repo).
+permissions:
+  contents: read
 
 jobs:
-
   deploy:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        node-version: [ 16.x ]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
     steps:
-
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          version: 9.15.4
 
-      - name: Configure Committer
-        run: |
-          git config user.name "curtisblanchette"
-          git config user.email "<curtis@4iiz.com>"
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
 
-      - name: Build Dist
-        run: |
-          npm install  
-          npm run build
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build (static export → ./out)
+        run: pnpm build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
 
       - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-west-2"
-        run: aws s3 sync ./build s3://www.curtisblanchette.com --delete --region ${AWS_REGION}
+        run: aws s3 sync ./out s3://www.curtisblanchette.com --delete --region us-west-2
 
-      - name: Create CloudFront Cache Invalidation
-        uses: chetan/invalidate-cloudfront-action@master
-        env:
-          DISTRIBUTION: ${{ secrets.CLOUDFRONT_ID }}
-          PATHS: "/*"
-          AWS_REGION: "us-west-2"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
