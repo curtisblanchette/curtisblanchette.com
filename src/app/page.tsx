@@ -3,6 +3,7 @@ import { Section } from "@/components/section";
 import { SectionHeader } from "@/components/section-header";
 import { HeroEditorial } from "@/components/hero/hero-editorial";
 import { ProjectList } from "@/components/project-list";
+import { LearningCentre } from "@/components/learning-centre";
 import { PullQuote } from "@/components/pull-quote";
 import { WritingList } from "@/components/writing-list";
 import { Stack } from "@/components/stack";
@@ -19,10 +20,11 @@ import { WORK } from "@/content/data/work";
  *   — hero (editorial)
  *   02 selected work — ProjectList (compact)
  *   — pull-quote (one per page)
- *   03 writing — top 4 + "All writing →"
- *   04 stack & tools (cb-invert)
+ *   03 learning centre — VHS-styled video showcase
+ *   04 writing — top 4 + "All writing →"
+ *   05 stack & tools (cb-invert)
  *   — marquee
- *   05 now (lede + terminal)
+ *   06 now (lede + terminal)
  *   — CTA (final section before footer)
  *
  * Career and Off-hours intentionally do NOT appear on home (kit
@@ -81,9 +83,19 @@ export default function HomePage() {
         <PullQuote />
       </Section>
 
-      <Section id="writing" variant="sm" container="wide">
+      <Section id="learn" variant="sm" container="wide">
         <SectionHeader
           num="03"
+          label="Learning Centre"
+          title="Talking-head explainers from the workshop."
+          sub="Short transmissions on the systems behind AI delivery — memory, retrieval, agent loops, the un-fun parts. Cross-posted from LinkedIn."
+        />
+        <LearningCentre />
+      </Section>
+
+      <Section id="writing" variant="sm" container="wide">
+        <SectionHeader
+          num="04"
           label="Writing"
           title="Notes from the trenches."
           sub="Mostly on AI-native delivery, judgment as a priced layer, and what changes when execution gets cheap."
@@ -103,7 +115,7 @@ export default function HomePage() {
         container="wide"
       >
         <SectionHeader
-          num="04"
+          num="05"
           label="Stack & tools"
           title="The tools I trust, more or less in order."
           sub="Software is a craft. These are mine. None of them are dogma."
@@ -115,7 +127,7 @@ export default function HomePage() {
 
       <Section id="now" variant="sm" container="wide">
         <SectionHeader
-          num="05"
+          num="06"
           label="Now"
           title="What I'm working on this month."
           sub="A /now page in the Derek-Sivers tradition. Updated when it stops being true."

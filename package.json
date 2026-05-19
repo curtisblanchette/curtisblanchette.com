@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "cv:pdf": "node scripts/render-cv.mjs"
+    "cv:pdf": "node scripts/render-cv.mjs",
+    "video:optimize": "node scripts/optimize-video.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
