@@ -62,9 +62,17 @@ export default function HomePage() {
             className="cb-display-sm"
             style={{ maxWidth: "30ch", fontWeight: 500 }}
           >
-            I lead engineering at <em className="cb-eiko-i">Metalab</em>.
-            Right now: AI-native client work, secure AI enablement, and
-            the workflows that accelerate how engineers ship.
+            I lead engineering at{" "}
+            <a
+              href="https://www.metalab.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="cb-link"
+            >
+              <em className="cb-eiko-i">Metalab</em>
+            </a>
+            . Right now: AI-native client work, secure AI enablement,
+            and the workflows that accelerate how engineers ship.
           </p>
         </div>
       </Section>
