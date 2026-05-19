@@ -33,6 +33,13 @@ export function Footer() {
             <ul className="cb-footer__list">
               <li><Link href="/work">Work</Link></li>
               <li><Link href="/writing">Writing</Link></li>
+              <li>
+                {/* Static HTML/PDF emitted from public/. Not a Next route,
+                    so use a plain <a> rather than <Link>. */}
+                <a href="/cv.html">CV</a>
+                {" · "}
+                <a href="/cv.pdf" download>PDF</a>
+              </li>
               <li><Link href="/#contact">Contact</Link></li>
             </ul>
           </div>
