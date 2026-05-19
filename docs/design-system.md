@@ -13,8 +13,8 @@ Defined once in `src/app/globals.css` via Tailwind v4 `@theme`:
 | `--color-muted` | `#737373` | Secondary text, dates, labels |
 | `--color-faint` | `#404040` | Disabled / decorative |
 | `--color-line` | `#262626` | All 1px borders and rules |
-| `--color-accent` | `#ff5500` | The one accent. Reserved. |
-| `--color-accent-dim` | `#cc4400` | Underlines on accent links |
+| `--color-accent` | `#30d158` | The one accent (system green, Apple `systemGreen` dark). Reserved. |
+| `--color-accent-dim` | `#21a040` | Underlines on accent links, pressed states |
 | `--font-mono` | IBM Plex Mono + system mono fallbacks | The only font |
 
 ## Rules
