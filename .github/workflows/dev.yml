@@ -52,8 +52,49 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
-      - name: Upload to S3
-        run: aws s3 sync ./out s3://www.curtisblanchette.com --delete --region us-west-2
+      # ------------------------------------------------------------------
+      # S3 sync is split in two passes so each content class gets the right
+      # Cache-Control header. Headers are baked at upload time and flow
+      # through CloudFront -> browser:
+      #
+      #   immutable  : /_next/static/* (content-hashed) and /videos/* (stable
+      #                slugs). Lock for a year. Browsers don't refetch.
+      #   revalidate : everything else (HTML, sitemap, robots, /cv.*).
+      #                5 min at the edge, 1 min in the browser, must-
+      #                revalidate when stale.
+      #
+      # `aws s3 sync` only re-uploads changed files, so Cache-Control on
+      # unchanged objects is preserved between deploys. To rewrite headers
+      # on objects already in the bucket, run scripts/cdn-backfill.sh once.
+      # ------------------------------------------------------------------
+      - name: Sync long-cache assets (videos, posters, Next chunks)
+        run: |
+          aws s3 sync ./out/_next/static s3://www.curtisblanchette.com/_next/static \
+            --cache-control "public, max-age=31536000, immutable" \
+            --region us-west-2
+          if [ -d ./out/videos ]; then
+            aws s3 sync ./out/videos s3://www.curtisblanchette.com/videos \
+              --cache-control "public, max-age=31536000, immutable" \
+              --region us-west-2
+          fi
 
-      - name: Invalidate CloudFront
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
+      - name: Sync short-cache content (HTML, sitemap, CV, root)
+        run: |
+          aws s3 sync ./out s3://www.curtisblanchette.com \
+            --delete \
+            --cache-control "public, max-age=60, s-maxage=300, must-revalidate" \
+            --exclude "_next/static/*" \
+            --exclude "videos/*" \
+            --region us-west-2
+
+      # Invalidate only mutable paths. Immutable assets at /_next/static/*
+      # and /videos/* have content-addressable names (next chunks) or
+      # stable slugs (videos) and don't benefit from edge eviction; their
+      # browsers already hold them under the immutable header.
+      - name: Invalidate CloudFront (mutable paths only)
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
+            --paths "/" "/index.html" "/404.html" "/sitemap.xml" "/robots.txt" \
+                    "/cv.html" "/cv.pdf" \
+                    "/work/*" "/writing/*"
